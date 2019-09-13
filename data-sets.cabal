@@ -1,0 +1,68 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: e6b5c43bee296031920329d86dcd27676d6f739b3d6ca42689e8ce6147454313
+
+name:           data-sets
+version:        0.1.0.0
+synopsis:       data-sets for Blue Ripple Politics along with Frames types and loaders for them
+category:       Numeric
+homepage:       https://github.com/blueripple/data-sets#readme
+bug-reports:    https://github.com/blueripple/data-sets/issues
+author:         Adam Conner-Sax
+maintainer:     adam@blueripplepolitics.org
+copyright:      2019 Adam Conner-Sax
+license:        BSD3
+build-type:     Simple
+extra-source-files:
+    Changelog.md
+    Readme.md
+data-files:
+    demographic/ageSexEducationDemographics2010-2017.csv
+    demographic/ageSexRaceDemographics2010-2017.csv
+    demographic/contextDemographicsByDistrict.csv
+    election/1976-2018-house.csv
+    election/1976-2018-house_v5.csv
+    election/DetailedTurnoutByAgeSexEducation2010-2018.csv
+    election/DetailedTurnoutByAgeSexRace2010-2018.csv
+    election/EdisonExitPoll2018.csv
+    election/electionResult2018.csv
+    campaign-finance/allSpendingFrom20180801Through20181106.csv
+    campaign-finance/allSpendingThrough20180731.csv
+    campaign-finance/allSpendingThrough20181106.csv
+    campaign-finance/forecastAndSpending.csv
+    dictionaries/states.csv
+    other/angryDemsContributions20181203.csv
+    other/angryDemsContributions20181203_orig.csv
+data-dir:       data
+
+source-repository head
+  type: git
+  location: https://github.com/blueripple/data-sets
+
+library
+  exposed-modules:
+      BlueRipple.Data.DataFrames
+      BlueRipple.Data.DataSourcePaths
+  other-modules:
+      Paths_data_sets
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -fno-warn-unused-top-binds -funbox-strict-fields
+  build-depends:
+      Frames
+    , Frames-utils
+    , base >=4.12.0 && <4.13
+    , containers >=0.5.0 && <0.7
+    , directory >=1.3.3.0 && <1.4.0.0
+    , foldl
+    , knit-haskell
+    , mtl
+    , pipes
+    , polysemy
+    , text >=1.2.3 && <1.3
+    , vinyl
+  default-language: Haskell2010
