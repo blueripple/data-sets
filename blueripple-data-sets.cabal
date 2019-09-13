@@ -4,9 +4,9 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e6b5c43bee296031920329d86dcd27676d6f739b3d6ca42689e8ce6147454313
+-- hash: 5ffbbf9217e1eb0dbbab785ac376caf352fde05f7d29f1f36730c9fceb06eabc
 
-name:           data-sets
+name:           blueripple-data-sets
 version:        0.1.0.0
 synopsis:       data-sets for Blue Ripple Politics along with Frames types and loaders for them
 category:       Numeric
@@ -48,7 +48,7 @@ library
       BlueRipple.Data.DataFrames
       BlueRipple.Data.DataSourcePaths
   other-modules:
-      Paths_data_sets
+      Paths_blueripple_data_sets
   hs-source-dirs:
       src
   ghc-options: -Wall -fno-warn-unused-top-binds -funbox-strict-fields

@@ -2,7 +2,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module BlueRipple.Data.DataSourcePaths where
 
-import qualified Paths_data_sets               as Paths
+import qualified Paths_blueripple_data_sets    as Paths
 --import qualified Frames.TH                     as F
 
 thFramesDataDir = "./data/"
