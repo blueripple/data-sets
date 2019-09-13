@@ -43,7 +43,7 @@ framesPath :: FilePath -> FilePath
 framesPath x = thFramesDataDir ++ x
 
 usePath :: FilePath -> IO FilePath
-usePath x = fmap (++ x) Paths.getDataDir
+usePath x = fmap (\dd -> dd ++ "/" ++ x) Paths.getDataDir
 
 {-
 ccesTSV :: FilePath = dataDir ++ "CCES_cumulative_2006_2018.txt"
