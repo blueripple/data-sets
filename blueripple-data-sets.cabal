@@ -23,6 +23,8 @@ extra-source-files:
 data-files:
     demographic/ageSexEducationDemographics2010-2017.csv
     demographic/ageSexRaceDemographics2010-2017.csv
+    demographic/ageSexEducationDemographics2010-2018.csv
+    demographic/ageSexRaceDemographics2010-2018.csv
     demographic/contextDemographicsByDistrict.csv
     election/1976-2018-house.csv
     election/1976-2018-house_v5.csv

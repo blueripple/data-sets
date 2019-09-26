@@ -32,9 +32,9 @@ exitPoll2018CSV :: FilePath = electionDir ++ "EdisonExitPoll2018.csv"
 contextDemographicsCSV :: FilePath =
   demographicDir ++ "contextDemographicsByDistrict.csv"
 ageSexRaceDemographicsLongCSV :: FilePath =
-  demographicDir ++ "ageSexRaceDemographics2010-2017.csv"
+  demographicDir ++ "ageSexRaceDemographics2010-2018.csv"
 ageSexEducationDemographicsLongCSV :: FilePath =
-  demographicDir ++ "ageSexEducationDemographics2010-2017.csv"
+  demographicDir ++ "ageSexEducationDemographics2010-2018.csv"
 
 angryDemsCSV :: FilePath = otherDir ++ "angryDemsContributions20181203.csv"
 
