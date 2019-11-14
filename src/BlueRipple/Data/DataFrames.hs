@@ -62,6 +62,8 @@ F.tableTypes "ASRDemographics" (framesPath ageSexRaceDemographicsLongCSV)
 F.tableTypes "ASEDemographics" (framesPath ageSexEducationDemographicsLongCSV)
 F.tableTypes "EdisonExit2018" (framesPath exitPoll2018CSV)
 
+F.tableTypes "States" (framesPath statesCSV)
+
 -- these columns are parsed wrong so we fix them before parsing
 -- F.declareColumn "CCESVvRegstatus" ''Int  
 -- F.declareColumn "CCESHispanic"    ''Int

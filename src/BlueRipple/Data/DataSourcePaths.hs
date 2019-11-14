@@ -38,6 +38,8 @@ ageSexEducationDemographicsLongCSV :: FilePath =
 
 angryDemsCSV :: FilePath = otherDir ++ "angryDemsContributions20181203.csv"
 
+statesCSV :: FilePath = dictionariesDir ++ "states.csv"
+
 
 framesPath :: FilePath -> FilePath
 framesPath x = thFramesDataDir ++ x
