@@ -48,9 +48,9 @@ source-repository head
 library
   exposed-modules:
       BlueRipple.Data.DataFrames
-      BlueRipple.Data.DataSourcePaths
+      BlueRipple.Data.DataSourcePaths      
+  other-modules:
       Paths_blueripple_data_sets
-  other-modules:      
   hs-source-dirs:
       src
   ghc-options: -Wall -fno-warn-unused-top-binds -funbox-strict-fields
