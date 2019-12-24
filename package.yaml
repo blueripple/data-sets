@@ -35,4 +35,5 @@ data-files:
 - election/*.csv
 - campaign-finance/*.csv
 - dictionaries/*.csv
+- geo/*.topojson
 - other/*.csv
