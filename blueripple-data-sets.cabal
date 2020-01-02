@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5ffbbf9217e1eb0dbbab785ac376caf352fde05f7d29f1f36730c9fceb06eabc
+-- hash: 78f7bd54729195421d0c11cd59e6807c420c60413595c963cc1073ea0ef62f51
 
 name:           blueripple-data-sets
 version:        0.1.0.0
@@ -22,8 +22,8 @@ extra-source-files:
     Readme.md
 data-files:
     demographic/ageSexEducationDemographics2010-2017.csv
-    demographic/ageSexRaceDemographics2010-2017.csv
     demographic/ageSexEducationDemographics2010-2018.csv
+    demographic/ageSexRaceDemographics2010-2017.csv
     demographic/ageSexRaceDemographics2010-2018.csv
     demographic/contextDemographicsByDistrict.csv
     election/1976-2018-house.csv
@@ -37,6 +37,8 @@ data-files:
     campaign-finance/allSpendingThrough20181106.csv
     campaign-finance/forecastAndSpending.csv
     dictionaries/states.csv
+    geo/cd116_2018.topojson
+    geo/cd116_2018_dense.topojson
     other/angryDemsContributions20181203.csv
     other/angryDemsContributions20181203_orig.csv
 data-dir:       data
@@ -48,7 +50,8 @@ source-repository head
 library
   exposed-modules:
       BlueRipple.Data.DataFrames
-      BlueRipple.Data.DataSourcePaths      
+      BlueRipple.Data.DataSourcePaths
+      BlueRipple.Data.Utilities
   other-modules:
       Paths_blueripple_data_sets
   hs-source-dirs:
@@ -56,12 +59,14 @@ library
   ghc-options: -Wall -fno-warn-unused-top-binds -funbox-strict-fields
   build-depends:
       Frames
+    , Frames-map-reduce
     , Frames-utils
     , base >=4.12.0 && <4.13
     , containers >=0.5.0 && <0.7
     , directory >=1.3.3.0 && <1.4.0.0
     , foldl
     , knit-haskell
+    , map-reduce-folds
     , mtl
     , pipes
     , polysemy
