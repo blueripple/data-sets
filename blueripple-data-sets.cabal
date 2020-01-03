@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 78f7bd54729195421d0c11cd59e6807c420c60413595c963cc1073ea0ef62f51
+-- hash: 88e30453755e521872e5bfefb2a2c6cc01098e5393557ef41c086acb40193f88
 
 name:           blueripple-data-sets
 version:        0.1.0.0
@@ -51,7 +51,6 @@ library
   exposed-modules:
       BlueRipple.Data.DataFrames
       BlueRipple.Data.DataSourcePaths
-      BlueRipple.Data.Utilities
   other-modules:
       Paths_blueripple_data_sets
   hs-source-dirs:
