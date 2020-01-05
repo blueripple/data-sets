@@ -26,6 +26,8 @@ detailedASRTurnoutCSV :: FilePath =
   electionDir ++ "DetailedTurnoutByAgeSexRace2010-2018.csv"
 detailedASETurnoutCSV :: FilePath =
   electionDir ++ "DetailedTurnoutByAgeSexEducation2010-2018.csv"
+stateTurnoutCSV :: FilePath =
+  electionDir ++ "StateTurnout.csv"
 electionResultsCSV :: FilePath = electionDir ++ "electionResult2018.csv"
 exitPoll2018CSV :: FilePath = electionDir ++ "EdisonExitPoll2018.csv"
 

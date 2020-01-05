@@ -58,6 +58,7 @@ F.tableTypes "ContextDemographics" (framesPath contextDemographicsCSV)
 
 F.tableTypes "TurnoutASR"          (framesPath detailedASRTurnoutCSV)
 F.tableTypes "TurnoutASE"          (framesPath detailedASETurnoutCSV)
+F.tableTypes "StateTurnout"        (framesPath stateTurnoutCSV)
 F.tableTypes "ASRDemographics" (framesPath ageSexRaceDemographicsLongCSV)
 F.tableTypes "ASEDemographics" (framesPath ageSexEducationDemographicsLongCSV)
 F.tableTypes "EdisonExit2018" (framesPath exitPoll2018CSV)
