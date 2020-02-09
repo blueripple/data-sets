@@ -32,6 +32,7 @@ data-files:
     election/DetailedTurnoutByAgeSexRace2010-2018.csv
     election/EdisonExitPoll2018.csv
     election/electionResult2018.csv
+    election/StateTurnout.csv
     campaign-finance/allSpendingFrom20180801Through20181106.csv
     campaign-finance/allSpendingThrough20180731.csv
     campaign-finance/allSpendingThrough20181106.csv
