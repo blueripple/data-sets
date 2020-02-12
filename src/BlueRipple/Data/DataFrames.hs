@@ -54,6 +54,7 @@ F.tableTypes' (F.rowGen (framesPath forecastAndSpendingCSV)) { F.rowTypeName = "
 F.tableTypes "ElectionResults" (framesPath electionResultsCSV)
 F.tableTypes "AngryDems" (framesPath angryDemsCSV)
 F.tableTypes "HouseElections" (framesPath houseElectionsCSV)
+F.tableTypes "PresidentialByState" (framesPath presidentialByStateCSV)
 F.tableTypes "ContextDemographics" (framesPath contextDemographicsCSV)
 
 F.tableTypes "TurnoutASR"          (framesPath detailedASRTurnoutCSV)
