@@ -5,6 +5,7 @@ Year,State Abbreviation,Electors
 2012,AR,6
 2012,CA,55
 2012,CO,9
+2012,CT,7
 2012,DE,3
 2012,DC,3
 2012,FL,29
@@ -19,6 +20,7 @@ Year,State Abbreviation,Electors
 2012,LA,8
 2012,ME,4
 2012,MD,10
+2012,MI,16
 2012,MN,10
 2012,MS,6
 2012,MO,10
@@ -53,6 +55,7 @@ Year,State Abbreviation,Electors
 2016,AR,6
 2016,CA,55
 2016,CO,9
+2016,CT,7
 2016,DE,3
 2016,DC,3
 2016,FL,29
@@ -67,6 +70,7 @@ Year,State Abbreviation,Electors
 2016,LA,8
 2016,ME,4
 2016,MD,10
+2016,MI,16
 2016,MN,10
 2016,MS,6
 2016,MO,10
@@ -101,6 +105,7 @@ Year,State Abbreviation,Electors
 2020,AR,6
 2020,CA,55
 2020,CO,9
+2020,CT,7
 2020,DE,3
 2020,DC,3
 2020,FL,29
@@ -115,6 +120,7 @@ Year,State Abbreviation,Electors
 2020,LA,8
 2020,ME,4
 2020,MD,10
+2020,MI,16
 2020,MN,10
 2020,MS,6
 2020,MO,10
