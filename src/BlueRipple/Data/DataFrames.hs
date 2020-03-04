@@ -134,6 +134,7 @@ maybeRecsToFrame
      , V.RPureConstrained V.KnownField rs
      , V.RecApplicative rs
      , V.RApply rs
+--     , Show (F.Rec (Maybe F.:. F.ElField) rs)
      )
   => (F.Rec (Maybe F.:. F.ElField) rs -> (F.Rec (Maybe F.:. F.ElField) rs)) -- fix any Nothings you need to/can
   -> (F.Record rs -> Bool) -- filter after removing Nothings
@@ -142,6 +143,7 @@ maybeRecsToFrame
 maybeRecsToFrame fixMissing filterRows maybeRecs =
   K.wrapPrefix "maybeRecsToFrame" $ do
     K.logLE K.Diagnostic $ "Input rows: " <> (T.pack $ show $ length maybeRecs)
+--    K.logLE K.Diagnostic $ "2 Rows: " <> (T.pack $ show $ take 2 $ maybeRecs)
     let missingPre = FM.whatsMissing maybeRecs
     K.logLE K.Diagnostic
       $  "Missing Data before fixing: \n"

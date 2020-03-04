@@ -1,6 +1,6 @@
-packages: . 
+packages: .
 jobs: 4
-with-compiler: /usr/local/bin/ghc
+with-compiler: ghc
 
 allow-newer: knit-haskell
 
