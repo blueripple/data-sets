@@ -38,6 +38,9 @@ ageSexRaceDemographicsLongCSV :: FilePath =
   demographicDir ++ "ageSexRaceDemographics2010-2018.csv"
 ageSexEducationDemographicsLongCSV :: FilePath =
   demographicDir ++ "ageSexEducationDemographics2010-2018.csv"
+cvapByCD2014_2018 :: FilePath =
+  demographicDir ++ "CVAPByCD2014-2018.csv"
+
 
 angryDemsCSV :: FilePath = otherDir ++ "angryDemsContributions20181203.csv"
 
