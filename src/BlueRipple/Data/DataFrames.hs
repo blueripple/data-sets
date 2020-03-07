@@ -57,6 +57,7 @@ F.tableTypes "HouseElections" (framesPath houseElectionsCSV)
 F.tableTypes "PresidentialByState" (framesPath presidentialByStateCSV)
 F.tableTypes "ContextDemographics" (framesPath contextDemographicsCSV)
 F.tableTypes "CVAPByCDAndRace_Raw" (framesPath cvapByCDAndRace2014_2018)
+F.tableTypes "PopulationsByCounty_Raw" (framesPath popsByCounty) 
 
 F.tableTypes "TurnoutASR"          (framesPath detailedASRTurnoutCSV)
 F.tableTypes "TurnoutASE"          (framesPath detailedASETurnoutCSV)
@@ -67,6 +68,8 @@ F.tableTypes "EdisonExit2018" (framesPath exitPoll2018CSV)
 F.tableTypes "ElectoralCollege" (framesPath electorsCSV)
 
 F.tableTypes "States" (framesPath statesCSV)
+F.tableTypes "StateCountyCD" (framesPath stateCounty116CD)
+F.tableTypes "StateCountyTractPUMA" (framesPath stateCountyTractPUMA)
 
 -- these columns are parsed wrong so we fix them before parsing
 -- F.declareColumn "CCESVvRegstatus" ''Int  
