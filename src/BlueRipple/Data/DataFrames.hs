@@ -56,7 +56,7 @@ F.tableTypes "AngryDems" (framesPath angryDemsCSV)
 F.tableTypes "HouseElections" (framesPath houseElectionsCSV)
 F.tableTypes "PresidentialByState" (framesPath presidentialByStateCSV)
 F.tableTypes "ContextDemographics" (framesPath contextDemographicsCSV)
-F.tableTypes "CVAPByCD" (framesPath cvapByCD2014_2018)
+F.tableTypes "CVAPByCDAndRace_Raw" (framesPath cvapByCDAndRace2014_2018)
 
 F.tableTypes "TurnoutASR"          (framesPath detailedASRTurnoutCSV)
 F.tableTypes "TurnoutASE"          (framesPath detailedASETurnoutCSV)
