@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 88e30453755e521872e5bfefb2a2c6cc01098e5393557ef41c086acb40193f88
+-- hash: fed4375bec200790dd50996970ac1693c7f2ee69ac2e34aef2e4c6c2d1b7a65f
 
 name:           blueripple-data-sets
 version:        0.1.0.0
@@ -21,22 +21,30 @@ extra-source-files:
     Changelog.md
     Readme.md
 data-files:
+    demographic/2010StateCountyTractPUMA.csv
     demographic/ageSexEducationDemographics2010-2017.csv
     demographic/ageSexEducationDemographics2010-2018.csv
     demographic/ageSexRaceDemographics2010-2017.csv
     demographic/ageSexRaceDemographics2010-2018.csv
     demographic/contextDemographicsByDistrict.csv
+    demographic/CVAPByCD2014-2018.csv
+    demographic/populationsByCounty.csv
+    election/1976-2016-president.csv
+    election/1976-2016-president_orig.csv
     election/1976-2018-house.csv
     election/1976-2018-house_v5.csv
     election/DetailedTurnoutByAgeSexEducation2010-2018.csv
     election/DetailedTurnoutByAgeSexRace2010-2018.csv
     election/EdisonExitPoll2018.csv
     election/electionResult2018.csv
+    election/electoral_college.csv
     election/StateTurnout.csv
     campaign-finance/allSpendingFrom20180801Through20181106.csv
     campaign-finance/allSpendingThrough20180731.csv
     campaign-finance/allSpendingThrough20181106.csv
     campaign-finance/forecastAndSpending.csv
+    dictionaries/2010StateCountyTractPUMA.csv
+    dictionaries/StateCounty116CD.csv
     dictionaries/states.csv
     geo/cd116_2018.topojson
     geo/cd116_2018_dense.topojson
