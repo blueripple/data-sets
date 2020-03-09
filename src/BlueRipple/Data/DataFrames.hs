@@ -56,8 +56,8 @@ F.tableTypes "AngryDems" (framesPath angryDemsCSV)
 F.tableTypes "HouseElections" (framesPath houseElectionsCSV)
 F.tableTypes "PresidentialByState" (framesPath presidentialByStateCSV)
 F.tableTypes "ContextDemographics" (framesPath contextDemographicsCSV)
-F.tableTypes "CVAPByCDAndRace_Raw" (framesPath cvapByCDAndRace2014_2018)
-F.tableTypes "PopulationsByCounty_Raw" (framesPath popsByCounty) 
+F.tableTypes "CVAPByCDAndRace_Raw" (framesPath cvapByCDAndRace2014_2018CSV)
+F.tableTypes "PopulationsByCounty_Raw" (framesPath popsByCountyCSV) 
 
 F.tableTypes "TurnoutASR"          (framesPath detailedASRTurnoutCSV)
 F.tableTypes "TurnoutASE"          (framesPath detailedASETurnoutCSV)
@@ -65,11 +65,12 @@ F.tableTypes "StateTurnout"        (framesPath stateTurnoutCSV)
 F.tableTypes "ASRDemographics" (framesPath ageSexRaceDemographicsLongCSV)
 F.tableTypes "ASEDemographics" (framesPath ageSexEducationDemographicsLongCSV)
 F.tableTypes "EdisonExit2018" (framesPath exitPoll2018CSV)
+
 F.tableTypes "ElectoralCollege" (framesPath electorsCSV)
 
 F.tableTypes "States" (framesPath statesCSV)
-F.tableTypes "StateCountyCD" (framesPath stateCounty116CD)
-F.tableTypes "StateCountyTractPUMA" (framesPath stateCountyTractPUMA)
+F.tableTypes "StateCountyCD" (framesPath stateCounty116CDCSV)
+F.tableTypes "StateCountyTractPUMA" (framesPath stateCountyTractPUMACSV)
 
 -- these columns are parsed wrong so we fix them before parsing
 -- F.declareColumn "CCESVvRegstatus" ''Int  

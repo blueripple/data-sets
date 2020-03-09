@@ -38,13 +38,13 @@ ageSexRaceDemographicsLongCSV :: FilePath =
   demographicDir ++ "ageSexRaceDemographics2010-2018.csv"
 ageSexEducationDemographicsLongCSV :: FilePath =
   demographicDir ++ "ageSexEducationDemographics2010-2018.csv"
-cvapByCDAndRace2014_2018 :: FilePath =
+cvapByCDAndRace2014_2018CSV :: FilePath =
   demographicDir ++ "CVAPByCD2014-2018.csv"
-popsByCounty :: FilePath = demographicDir ++ "populationsByCounty.csv"
+popsByCountyCSV :: FilePath = demographicDir ++ "populationsByCounty.csv"
 
 statesCSV :: FilePath = dictionariesDir ++ "states.csv"
-stateCounty116CD :: FilePath = dictionariesDir ++ "StateCounty116CD.csv"
-stateCountyTractPUMA :: FilePath = dictionariesDir ++ "2010StateCountyTractPUMA.csv"
+stateCounty116CDCSV :: FilePath = dictionariesDir ++ "StateCounty116CD.csv"
+stateCountyTractPUMACSV :: FilePath = dictionariesDir ++ "2010StateCountyTractPUMA.csv"
 
 angryDemsCSV :: FilePath = otherDir ++ "angryDemsContributions20181203.csv"
 
