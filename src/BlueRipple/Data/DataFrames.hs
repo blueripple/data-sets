@@ -59,6 +59,7 @@ F.tableTypes "ContextDemographics" (framesPath contextDemographicsCSV)
 F.tableTypes "CVAPByCDAndRace_Raw" (framesPath cvapByCDAndRace2014_2018CSV)
 F.tableTypes "PopulationsByCounty_Raw" (framesPath popsByCountyCSV) 
 F.tableTypes "PUMA2012ToCD116"       (framesPath puma2012ToCD116CSV)
+F.tableTypes "PUMA2000ToCD116"       (framesPath puma2000ToCD116CSV)
 
 F.tableTypes "TurnoutASR"          (framesPath detailedASRTurnoutCSV)
 F.tableTypes "TurnoutASE"          (framesPath detailedASETurnoutCSV)

@@ -42,6 +42,7 @@ cvapByCDAndRace2014_2018CSV :: FilePath =
   demographicDir ++ "CVAPByCD2014-2018.csv"
 popsByCountyCSV :: FilePath = demographicDir ++ "populationsByCounty.csv"
 puma2012ToCD116CSV :: FilePath = demographicDir ++ "puma2012ToCD116.csv"
+puma2000ToCD116CSV :: FilePath = demographicDir ++ "puma2000ToCD116.csv"
 
 statesCSV :: FilePath = dictionariesDir ++ "states.csv"
 stateCounty116CDCSV :: FilePath = dictionariesDir ++ "StateCounty116CD.csv"
