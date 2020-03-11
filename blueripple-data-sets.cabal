@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7c6883dfbbcc4459cc40d766946912ddfcd00d4573138d469432c90d5281e26e
+-- hash: 94b390e33f55f0ef30962c08f0194f880807b3effd0ce81abfb4bf2e754706b4
 
 name:           blueripple-data-sets
 version:        0.1.0.0
@@ -28,6 +28,7 @@ data-files:
     demographic/contextDemographicsByDistrict.csv
     demographic/CVAPByCD2014-2018.csv
     demographic/populationsByCounty.csv
+    demographic/puma2000ToCD116.csv
     demographic/puma2012ToCD116.csv
     election/1976-2016-president.csv
     election/1976-2016-president_orig.csv
