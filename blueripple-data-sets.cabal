@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 94b390e33f55f0ef30962c08f0194f880807b3effd0ce81abfb4bf2e754706b4
+-- hash: 46b24716bcbe8eebcd1f71850946a5d826062be826f615dca0c8c6d72eaa4fc4
 
 name:           blueripple-data-sets
 version:        0.1.0.0
@@ -44,6 +44,7 @@ data-files:
     campaign-finance/allSpendingThrough20180731.csv
     campaign-finance/allSpendingThrough20181106.csv
     campaign-finance/forecastAndSpending.csv
+    dictionaries/2010CountyToCD116.csv
     dictionaries/2010StateCountyTractPUMA.csv
     dictionaries/StateCounty116CD.csv
     dictionaries/states.csv

@@ -5,52 +5,105 @@ module BlueRipple.Data.DataSourcePaths where
 import qualified Paths_blueripple_data_sets    as Paths
 --import qualified Frames.TH                     as F
 
+thFramesDataDir :: FilePath
 thFramesDataDir = "./data/"
+
+electionDir :: FilePath
 electionDir = "election/"
+
+demographicDir :: FilePath
 demographicDir = "demographic/"
+
+campaignFinanceDir :: FilePath
 campaignFinanceDir = "campaign-finance/"
+
+dictionariesDir :: FilePath
 dictionariesDir = "dictionaries/"
+
+otherDir :: FilePath
 otherDir = "other/"
 
-totalSpendingCSV :: FilePath =
+totalSpendingCSV :: FilePath
+totalSpendingCSV =
   campaignFinanceDir ++ "allSpendingThrough20181106.csv"
-totalSpendingBeforeCSV :: FilePath =
+
+totalSpendingBeforeCSV :: FilePath 
+totalSpendingBeforeCSV =
   campaignFinanceDir ++ "allSpendingThrough20180731.csv"
-totalSpendingDuringCSV :: FilePath =
+
+totalSpendingDuringCSV :: FilePath
+totalSpendingDuringCSV =
   campaignFinanceDir ++ "allSpendingFrom20180801Through20181106.csv"
-forecastAndSpendingCSV :: FilePath =
+
+forecastAndSpendingCSV :: FilePath   
+forecastAndSpendingCSV =
   campaignFinanceDir ++ "forecastAndSpending.csv"
+  
+houseElectionsCSV :: FilePath
+houseElectionsCSV = electionDir ++ "1976-2018-house_v5.csv"
 
-houseElectionsCSV :: FilePath = electionDir ++ "1976-2018-house_v5.csv"
-detailedASRTurnoutCSV :: FilePath =
+detailedASRTurnoutCSV :: FilePath 
+detailedASRTurnoutCSV =
   electionDir ++ "DetailedTurnoutByAgeSexRace2010-2018.csv"
-detailedASETurnoutCSV :: FilePath =
+
+detailedASETurnoutCSV :: FilePath 
+detailedASETurnoutCSV =
   electionDir ++ "DetailedTurnoutByAgeSexEducation2010-2018.csv"
-stateTurnoutCSV :: FilePath = electionDir ++ "StateTurnout.csv"
-electionResultsCSV :: FilePath = electionDir ++ "electionResult2018.csv"
-exitPoll2018CSV :: FilePath = electionDir ++ "EdisonExitPoll2018.csv"
-presidentialByStateCSV :: FilePath = electionDir ++ "1976-2016-president.csv"
-electorsCSV :: FilePath = electionDir ++ "electoral_college.csv"
 
-contextDemographicsCSV :: FilePath =
+stateTurnoutCSV :: FilePath 
+stateTurnoutCSV = electionDir ++ "StateTurnout.csv"
+
+electionResultsCSV :: FilePath
+electionResultsCSV = electionDir ++ "electionResult2018.csv"
+
+exitPoll2018CSV :: FilePath 
+exitPoll2018CSV = electionDir ++ "EdisonExitPoll2018.csv"
+
+presidentialByStateCSV :: FilePath 
+presidentialByStateCSV = electionDir ++ "1976-2016-president.csv"
+
+electorsCSV :: FilePath 
+electorsCSV = electionDir ++ "electoral_college.csv"
+
+contextDemographicsCSV :: FilePath
+contextDemographicsCSV =
   demographicDir ++ "contextDemographicsByDistrict.csv"
-ageSexRaceDemographicsLongCSV :: FilePath =
+
+ageSexRaceDemographicsLongCSV :: FilePath
+ageSexRaceDemographicsLongCSV =
   demographicDir ++ "ageSexRaceDemographics2010-2018.csv"
-ageSexEducationDemographicsLongCSV :: FilePath =
+
+ageSexEducationDemographicsLongCSV :: FilePath 
+ageSexEducationDemographicsLongCSV =
   demographicDir ++ "ageSexEducationDemographics2010-2018.csv"
-cvapByCDAndRace2014_2018CSV :: FilePath =
+
+cvapByCDAndRace2014_2018CSV :: FilePath 
+cvapByCDAndRace2014_2018CSV =
   demographicDir ++ "CVAPByCD2014-2018.csv"
-popsByCountyCSV :: FilePath = demographicDir ++ "populationsByCounty.csv"
-puma2012ToCD116CSV :: FilePath = demographicDir ++ "puma2012ToCD116.csv"
-puma2000ToCD116CSV :: FilePath = demographicDir ++ "puma2000ToCD116.csv"
 
-statesCSV :: FilePath = dictionariesDir ++ "states.csv"
-stateCounty116CDCSV :: FilePath = dictionariesDir ++ "StateCounty116CD.csv"
-stateCountyTractPUMACSV :: FilePath = dictionariesDir ++ "2010StateCountyTractPUMA.csv"
+popsByCountyCSV :: FilePath 
+popsByCountyCSV = demographicDir ++ "populationsByCounty.csv"
 
-angryDemsCSV :: FilePath = otherDir ++ "angryDemsContributions20181203.csv"
+puma2012ToCD116CSV :: FilePath 
+puma2012ToCD116CSV = demographicDir ++ "puma2012ToCD116.csv"
 
+puma2000ToCD116CSV :: FilePath 
+puma2000ToCD116CSV = demographicDir ++ "puma2000ToCD116.csv"
 
+statesCSV :: FilePath 
+statesCSV = dictionariesDir ++ "states.csv"
+
+stateCounty116CDCSV :: FilePath 
+stateCounty116CDCSV = dictionariesDir ++ "StateCounty116CD.csv"
+
+stateCountyTractPUMACSV :: FilePath 
+stateCountyTractPUMACSV = dictionariesDir ++ "2010StateCountyTractPUMA.csv"
+
+countyToCD116 :: FilePath
+countyToCD116 = dictionariesDir ++ "2010CountyToCD116.csv"
+
+angryDemsCSV :: FilePath 
+angryDemsCSV = otherDir ++ "angryDemsContributions20181203.csv"
 
 framesPath :: FilePath -> FilePath
 framesPath x = thFramesDataDir ++ x
