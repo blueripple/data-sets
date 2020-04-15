@@ -73,7 +73,7 @@ F.tableTypes "ElectoralCollege" (framesPath electorsCSV)
 F.tableTypes "States" (framesPath statesCSV)
 F.tableTypes "StateCountyCD" (framesPath stateCounty116CDCSV)
 F.tableTypes "StateCountyTractPUMA" (framesPath stateCountyTractPUMACSV)
-F.tableTypes "CountyToCD116" (framesPath countyToCD116)
+F.tableTypes "CountyToCD116" (framesPath countyToCD116CSV)
 
 -- these columns are parsed wrong so we fix them before parsing
 -- F.declareColumn "CCESVvRegstatus" ''Int  

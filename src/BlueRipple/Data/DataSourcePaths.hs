@@ -99,8 +99,8 @@ stateCounty116CDCSV = dictionariesDir ++ "StateCounty116CD.csv"
 stateCountyTractPUMACSV :: FilePath 
 stateCountyTractPUMACSV = dictionariesDir ++ "2010StateCountyTractPUMA.csv"
 
-countyToCD116 :: FilePath
-countyToCD116 = dictionariesDir ++ "2010CountyToCD116.csv"
+countyToCD116CSV :: FilePath
+countyToCD116CSV = dictionariesDir ++ "2010CountyToCD116.csv"
 
 angryDemsCSV :: FilePath 
 angryDemsCSV = otherDir ++ "angryDemsContributions20181203.csv"
