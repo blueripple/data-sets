@@ -1,4 +1,4 @@
-CountyFIPS,StateFIPS,CongressionalDistrict,StateAbbreviation,cntyname,Population,CountyWeight,CDWeight
+CountyFIPS,StateFIPS,CongressionalDistrict,StateAbbreviation,cntyname,CountyPopulation,CountyWeight,CDWeight
 1001,1,2,AL,Autauga AL,55416,1,0.081
 1003,1,1,AL,Baldwin AL,208563,1,0.295
 1005,1,2,AL,Barbour AL,25965,1,0.038
