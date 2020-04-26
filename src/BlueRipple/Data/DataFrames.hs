@@ -80,6 +80,7 @@ F.tableTypes "CountyToCD116" (framesPath countyToCD116CSV)
 -- F.declareColumn "CCESHispanic"    ''Int
 -- F.tableTypes' ccesRowGen
 
+
 loadToFrame
   :: forall rs effs
    . ( MonadIO (K.Sem effs)
@@ -103,6 +104,29 @@ loadToFrame po fp filterF = do
           <> T.pack fn
   reportRows frame fp
   return frame
+
+-- This goes through maybeRecs so we can see if we're dropping rows.  Slightly slower and more
+-- memory intensive (I assume)
+-- but since we will cache anything big post-processed, that seems like a good trade often.
+loadToFrameChecked
+  :: forall rs effs
+   . ( MonadIO (K.Sem effs)
+     , K.LogWithPrefixesLE effs
+     , F.ReadRec rs
+     , FI.RecVec rs
+     , V.RFoldMap rs
+     , V.RMap rs
+     , V.RPureConstrained V.KnownField rs
+     , V.RecApplicative rs
+     , V.RApply rs
+     , rs F.⊆ rs
+     )
+  => F.ParserOptions
+  -> FilePath
+  -> (F.Record rs -> Bool)
+  -> K.Sem effs (F.FrameRec rs)
+loadToFrameChecked po fp filterF = loadToMaybeRecs @rs @rs po (const True) fp >>= maybeRecsToFrame id filterF
+--  traverse (maybeRecsToFrame id filterF) $ loadToMaybeRecs po (const True) fp
 
 loadToMaybeRecs
   :: forall rs rs' effs
@@ -150,23 +174,19 @@ maybeRecsToFrame
   -> K.Sem effs (F.FrameRec rs)
 maybeRecsToFrame fixMissing filterRows maybeRecs =
   K.wrapPrefix "maybeRecsToFrame" $ do
-    K.logLE K.Diagnostic $ "Input rows: " <> (T.pack $ show $ length maybeRecs)
---    K.logLE K.Diagnostic $ "2 Rows: " <> (T.pack $ show $ take 2 $ maybeRecs)
     let missingPre = FM.whatsMissing maybeRecs
-    K.logLE K.Diagnostic
-      $  "Missing Data before fixing: \n"
-      <> (T.pack $ show missingPre)
-    let fixed       = fmap fixMissing maybeRecs
+        fixed       = fmap fixMissing maybeRecs
         missingPost = FM.whatsMissing fixed
-    K.logLE K.Diagnostic
-      $  "Missing Data after fixing: \n"
-      <> (T.pack $ show missingPost)
-    let droppedMissing = catMaybes $ fmap F.recMaybe fixed
-    K.logLE K.Diagnostic
-      $  "Rows after fixing and dropping missing: "
-      <> (T.pack $ show $ length droppedMissing)
-    let filtered = L.filter filterRows droppedMissing
-    K.logLE K.Diagnostic
-      $  "Rows after filtering: "
-      <> (T.pack $ show $ length filtered)
+        droppedMissing = catMaybes $ fmap F.recMaybe fixed
+        filtered = L.filter filterRows droppedMissing
+    K.logLE K.Diagnostic "Input rows:"
+    K.logLE K.Diagnostic (T.pack $ show $ length maybeRecs)
+    K.logLE K.Diagnostic "Missing Data before fixing:"
+    K.logLE K.Diagnostic (T.pack $ show missingPre)
+    K.logLE K.Diagnostic "Missing Data after fixing:"
+    K.logLE K.Diagnostic (T.pack $ show missingPost)
+    K.logLE K.Diagnostic "Rows after fixing and dropping missing:"
+    K.logLE K.Diagnostic (T.pack $ show $ length droppedMissing)
+    K.logLE K.Diagnostic "Rows after filtering: "
+    K.logLE K.Diagnostic (T.pack $ show $ length filtered)    
     return $ F.toFrame filtered
