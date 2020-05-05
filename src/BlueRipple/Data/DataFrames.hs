@@ -23,9 +23,16 @@ where
 import           BlueRipple.Data.DataSourcePaths
 import qualified Knit.Report                   as K
 
+import qualified Polysemy as Polysemy
+import qualified Polysemy.Error as Polysemy
+
 import qualified Control.Foldl                 as FL
+import           Control.Monad (join)
 import           Control.Monad.IO.Class         ( MonadIO(liftIO) )
+import           Control.Monad.Catch            ( SomeException, displayException )
+import qualified Control.Monad.Catch.Pure      as Exceptions
 import qualified Data.List                     as L
+import qualified Data.Map as Map
 import           Data.Maybe                     ( catMaybes )
 import           Data.Proxy                     ( Proxy(..) )
 import qualified Data.Text                     as T
@@ -39,8 +46,13 @@ import qualified Frames.TH                     as F
 import qualified Pipes                         as P
 import qualified Pipes.Prelude                 as P
 
+import qualified Text.Pandoc                   as Pandoc
+
 import qualified Streamly as Streamly
 import qualified Streamly.Prelude as Streamly
+import qualified Streamly.Internal.Prelude as Streamly
+--import qualified Streamly.Data.Fold as Streamly.Fold
+import qualified Streamly.Internal.Data.Fold as Streamly.Fold
 
 import qualified Frames.ParseableTypes         as FP
 import qualified Frames.MaybeUtils             as FM
@@ -80,8 +92,8 @@ F.tableTypes "StateCountyTractPUMA" (framesPath stateCountyTractPUMACSV)
 F.tableTypes "CountyToCD116" (framesPath countyToCD116CSV)
 
 loadToRecStream
-  :: forall rs m
-  . ( Monad m
+  :: forall rs r
+  . ( K.KnitEffects r
     , F.ReadRec rs
     , FI.RecVec rs
     , V.RMap rs
@@ -89,36 +101,55 @@ loadToRecStream
   => F.ParserOptions
   -> FilePath
   -> (F.Record rs -> Bool)
-  -> Streamly.SerialT m (F.Record rs)
+  -> Streamly.SerialT (K.Sem r) (F.Record rs)
 loadToRecStream po fp filterF =
-  Streamly.filter filterF $ Frames.Streamly.streamTable po fp
+  Streamly.filter filterF
+  $ fixMonadCatch
+  $ Frames.Streamly.streamTable po fp
 {-# INLINEABLE loadToRecStream #-}
 
 loadToMaybeRecStream
   :: forall rs rs' r
-  . (K.KnitEffects r
+  . ( K.KnitEffects r
     , F.ReadRec rs
     , FI.RecVec rs
     , V.RMap rs
+    , rs' F.⊆ rs    
     )
   => F.ParserOptions
   -> FilePath
   -> (F.Rec (Maybe F.:. F.ElField) rs -> Bool)
   -> Streamly.SerialT (K.Sem r) (F.Rec (Maybe F.:. F.ElField) rs')
 loadToMaybeRecStream po fp filterF = do
-  let s = Streamly.map (F.rcast @rs')
+  let s :: Streamly.SerialT (K.Sem r) (F.Rec (Maybe F.:. F.ElField) rs')
+      s = Streamly.map (F.rcast @rs')
           $ Streamly.filter filterF
+          $ fixMonadCatch
           $ Frames.Streamly.streamTableMaybe po fp
-  let reportRows :: Foldable f => Streamly.SerialT (K.Sem r) x -> FilePath -> K.Sem r ()
-      reportRows s fn = do
-        sLen <- Streamly.length s
+  let reportRows :: Streamly.SerialT (K.Sem r) x -> FilePath -> K.Sem r ()
+      reportRows str fn = do
+        sLen <- Streamly.length str
         K.logLE K.Diagnostic
-          $  T.pack (show s)
+          $  T.pack (show sLen)
           <> " rows in "
           <> T.pack fn
   Streamly.yieldM $ reportRows s fp
   s
 {-# INLINEABLE loadToMaybeRecStream #-}
+
+loadToRecList
+  :: forall rs r
+  . ( K.KnitEffects r
+    , F.ReadRec rs
+    , FI.RecVec rs
+    , V.RMap rs
+    )
+  => F.ParserOptions
+  -> FilePath
+  -> (F.Record rs -> Bool)
+  -> K.Sem r [F.Record rs]
+loadToRecList po fp filterF = Streamly.toList $ loadToRecStream po fp filterF 
+{-# INLINEABLE loadToRecList #-}
 
 loadToFrame
   :: forall rs effs
@@ -133,7 +164,7 @@ loadToFrame
   -> (F.Record rs -> Bool)
   -> K.Sem effs (F.FrameRec rs)
 loadToFrame po fp filterF = do
-  frame <- F.inCoreAoS $ toPipes $ loadToRecStream po fp filterF
+  frame <- liftIO $ FI.inCoreAoS $ toPipes $ Streamly.filter filterF $ Frames.Streamly.streamTable po fp
   let reportRows :: Foldable f => f x -> FilePath -> K.Sem effs ()
       reportRows f fn =
         K.logLE K.Diagnostic
@@ -143,13 +174,6 @@ loadToFrame po fp filterF = do
   reportRows frame fp
   return frame
 {-# INLINEABLE loadToFrame #-}
-
-toPipes :: Monad m => Streamly.SerialT m a -> P.Producer a m ()
-toPipes = P.unfoldr unconsS
-    where
-    -- Adapt S.uncons to return an Either instead of Maybe
-    unconsS s = Streamly.uncons s >>= maybe (return $ Left ()) (return . Right)
-{-# INLINEABLE toPipes #-}
 
 processMaybeRecStream
   :: ( K.LogWithPrefixesLE r
@@ -164,26 +188,53 @@ processMaybeRecStream
   -> (F.Record rs -> Bool) -- filter after removing Nothings
   -> Streamly.SerialT (K.Sem r) (F.Rec (Maybe F.:. F.ElField) rs)
   -> Streamly.SerialT (K.Sem r) (F.Record rs)
-processMaybeRecStream fixMissing filterRows maybeRecStream =
-
-  K.wrapPrefix "maybeRecsToFrame" $ do
-    let missingPre = FM.whatsMissing maybeRecs
-        fixed       = fmap fixMissing maybeRecs
-        missingPost = FM.whatsMissing fixed
-        droppedMissing = catMaybes $ fmap F.recMaybe fixed
-        filtered = L.filter filterRows droppedMissing
+processMaybeRecStream fixMissing filterRows maybeRecS = do
+  let addMissing m l = Map.insertWith (+) l 1 m
+      addMissings m = FL.fold (FL.Fold addMissing m id)
+      whatsMissingF = Streamly.Fold.mkPure (\m a -> addMissings m (FM.whatsMissingRow a)) Map.empty id
+      whatsMissing = Streamly.fold whatsMissingF 
+      fixedS = Streamly.map fixMissing maybeRecS
+      droppedMissingS = Streamly.mapMaybe F.recMaybe $ fixedS
+      filteredS = Streamly.filter filterRows $ droppedMissingS
+  Streamly.yieldM $ K.wrapPrefix "maybeRecsToFrame" $ do
+    lengthPre <- Streamly.length maybeRecS
     K.logLE K.Diagnostic "Input rows:"
-    K.logLE K.Diagnostic (T.pack $ show $ length maybeRecs)
-    K.logLE K.Diagnostic "Missing Data before fixing:"
+    K.logLE K.Diagnostic (T.pack $ show $ lengthPre)
+    missingPre <- whatsMissing maybeRecS
+    K.logLE K.Diagnostic "Missing Data before fixing:"    
     K.logLE K.Diagnostic (T.pack $ show missingPre)
+    missingPost <- whatsMissing fixedS
     K.logLE K.Diagnostic "Missing Data after fixing:"
-    K.logLE K.Diagnostic (T.pack $ show missingPost)
+    K.logLE K.Diagnostic (T.pack $ show missingPost)    
+    lengthAfterDrops <- Streamly.length droppedMissingS
     K.logLE K.Diagnostic "Rows after fixing and dropping missing:"
-    K.logLE K.Diagnostic (T.pack $ show $ length droppedMissing)
+    K.logLE K.Diagnostic (T.pack $ show $ lengthAfterDrops)
+    lengthFiltered <- Streamly.length $ filteredS
     K.logLE K.Diagnostic "Rows after filtering: "
-    K.logLE K.Diagnostic (T.pack $ show $ length filtered)    
-    return filtered
+    K.logLE K.Diagnostic (T.pack $ show $ lengthFiltered)    
+  filteredS
 {-# INLINEABLE processMaybeRecStream #-}
+
+toPipes :: Monad m => Streamly.SerialT m a -> P.Producer a m ()
+toPipes = P.unfoldr unconsS
+    where
+    -- Adapt S.uncons to return an Either instead of Maybe
+    unconsS s = Streamly.uncons s >>= maybe (return $ Left ()) (return . Right)
+{-# INLINEABLE toPipes #-}
+
+
+someExceptionAsPandocError :: forall r a. (Polysemy.MemberWithError (Polysemy.Error K.PandocError) r)
+                           => Polysemy.Sem (Polysemy.Error SomeException ': r) a -> Polysemy.Sem r a
+someExceptionAsPandocError = Polysemy.mapError (\(e :: SomeException) -> Pandoc.PandocSomeError $ T.pack $ displayException e)
+{-# INLINEABLE someExceptionAsPandocError #-}
+
+
+fixMonadCatch :: (Polysemy.MemberWithError (Polysemy.Error SomeException) r)
+              => Streamly.SerialT (Exceptions.CatchT (K.Sem r)) a -> Streamly.SerialT (K.Sem r) a
+fixMonadCatch = Streamly.hoist f where
+  f :: forall r a. (Polysemy.MemberWithError (Polysemy.Error SomeException) r) =>  Exceptions.CatchT (K.Sem r) a -> K.Sem r a
+  f = join . fmap Polysemy.fromEither . Exceptions.runCatchT
+{-# INLINEABLE fixMonadCatch #-}
 
 {-
 loadToFrame
@@ -215,7 +266,6 @@ fromPipes = Streamly.unfoldrM unconsP
     where
     -- Adapt P.next to return a Maybe instead of Either
     unconsP p = P.next p >>= either (\_ -> return Nothing) (return . Just)
--}
   
 loadToRecList
   :: forall rs effs
@@ -243,7 +293,7 @@ loadToRecList po fp filterF = do
           <> T.pack fn
   reportRows asRecList fp
   return asRecList
-
+-}
 
 -- This goes through maybeRecs so we can see if we're dropping rows.  Slightly slower and more
 -- memory intensive (I assume)
