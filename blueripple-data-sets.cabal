@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 2b7f1bacdb14b6059f7b3a02bde070efaaf62fd065e4d116a8b345666c5dc6f0
+-- hash: 2419de211be68818085571a19e0db2f630060c6f6fa2da89522f43982b1b982c
 
 name:           blueripple-data-sets
 version:        0.1.0.0
@@ -66,7 +66,7 @@ library
       Paths_blueripple_data_sets
   hs-source-dirs:
       src
-  ghc-options: -Wall -fno-warn-unused-top-binds -funbox-strict-fields
+  ghc-options: -Wall -O2  -fdicts-strict -fmax-worker-args=16 -fspec-constr-recursive=16 -fno-warn-unused-top-binds -funbox-strict-fields
   build-depends:
       Frames
     , Frames-map-reduce
