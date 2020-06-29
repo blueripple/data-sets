@@ -153,7 +153,7 @@ loadToMaybeRecStream po fp filterF =
 
 loadToRecList
   :: forall rs r
-  . ( K.DefaultEffects r
+  . ( K.KnitEffects r
     , F.ReadRec rs
     , V.RMap rs
     )
@@ -166,7 +166,7 @@ loadToRecList po fp filterF = Streamly.toList $ K.streamlyToKnitS $ loadToRecStr
 
 loadToFrame
   :: forall rs r
-   . ( K.DefaultEffects r
+   . ( K.KnitEffects r
      , F.ReadRec rs
      , FI.RecVec rs
      , V.RMap rs
