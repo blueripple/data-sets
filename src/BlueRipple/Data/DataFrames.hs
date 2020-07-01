@@ -28,7 +28,6 @@ import qualified Polysemy as Polysemy
 import qualified Polysemy.Error as Polysemy
 
 import qualified Control.Foldl                 as FL
-import           Control.Monad (join)
 import           Control.Monad.IO.Class         ( MonadIO(liftIO) )
 import           Control.Monad.Catch            ( SomeException, displayException )
 import qualified Control.Monad.Catch.Pure      as Exceptions
@@ -51,8 +50,6 @@ import qualified Text.Pandoc                   as Pandoc
 
 import qualified Streamly as Streamly
 import qualified Streamly.Prelude as Streamly
-import qualified Streamly.Internal.Prelude as Streamly
---import qualified Streamly.Data.Fold as Streamly.Fold
 import qualified Streamly.Internal.Data.Fold as Streamly.Fold
 
 import qualified Frames.ParseableTypes         as FP
@@ -153,7 +150,7 @@ loadToMaybeRecStream po fp filterF =
 
 loadToRecList
   :: forall rs r
-  . ( K.DefaultEffects r
+  . ( K.KnitEffects r
     , F.ReadRec rs
     , V.RMap rs
     )
@@ -166,7 +163,7 @@ loadToRecList po fp filterF = Streamly.toList $ K.streamlyToKnitS $ loadToRecStr
 
 loadToFrame
   :: forall rs r
-   . ( K.DefaultEffects r
+   . ( K.KnitEffects r
      , F.ReadRec rs
      , FI.RecVec rs
      , V.RMap rs
@@ -227,7 +224,7 @@ someExceptionAsPandocError :: forall r a. (Polysemy.MemberWithError (Polysemy.Er
 someExceptionAsPandocError = Polysemy.mapError (\(e :: SomeException) -> Pandoc.PandocSomeError $ T.pack $ displayException e)
 {-# INLINEABLE someExceptionAsPandocError #-}
 
-
+{-
 fixMonadCatch :: (Polysemy.MemberWithError (Polysemy.Error SomeException) r)
               => Streamly.SerialT (Exceptions.CatchT (K.Sem r)) a -> Streamly.SerialT (K.Sem r) a
 fixMonadCatch = Streamly.hoist f where
@@ -235,7 +232,7 @@ fixMonadCatch = Streamly.hoist f where
   f = join . fmap Polysemy.fromEither . Exceptions.runCatchT
 {-# INLINEABLE fixMonadCatch #-}
 
-{-
+
 loadToFrame
   :: forall rs effs
    . ( MonadIO (K.Sem effs)
