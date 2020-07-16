@@ -40,7 +40,7 @@ forecastAndSpendingCSV =
   campaignFinanceDir ++ "forecastAndSpending.csv"
   
 houseElectionsCSV :: FilePath
-houseElectionsCSV = electionDir ++ "1976-2018-house_v5.csv"
+houseElectionsCSV = electionDir ++ "1976-2018-house_v5_u1.csv"
 
 detailedASRTurnoutCSV :: FilePath 
 detailedASRTurnoutCSV =

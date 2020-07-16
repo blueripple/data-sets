@@ -13,6 +13,7 @@
 {-# LANGUAGE Rank2Types          #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections       #-}
+{-# OPTIONS_GHC -fplugin=Polysemy.Plugin #-}
 
 module BlueRipple.Data.DataFrames
   ( module BlueRipple.Data.DataSourcePaths
