@@ -51,6 +51,7 @@ import qualified Text.Pandoc                   as Pandoc
 
 import qualified Streamly as Streamly
 import qualified Streamly.Prelude as Streamly
+import qualified Streamly.Internal.Prelude as Streamly
 import qualified Streamly.Internal.Data.Fold as Streamly.Fold
 
 import qualified Frames.ParseableTypes         as FP
@@ -106,9 +107,9 @@ loadToRecStream
   -> FilePath
   -> (F.Record rs -> Bool)
   -> t m (F.Record rs)
-loadToRecStream po fp filterF = 
-  Streamly.filter filterF
-    $ Frames.Streamly.streamTable po fp
+loadToRecStream po fp filterF = Streamly.filter filterF
+  $ Streamly.tapOffsetEvery 500000 500000 (Streamly.Fold.drainBy (const $ P.liftIO $ putStrLn "loadToRecStream: 500,000")) 
+  $ Frames.Streamly.streamTable po fp
 {-# INLINEABLE loadToRecStream #-}
 
 -- load with cols qs
