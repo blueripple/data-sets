@@ -108,8 +108,7 @@ loadToRecStream
   -> (F.Record rs -> Bool)
   -> t m (F.Record rs)
 loadToRecStream po fp filterF = Streamly.filter filterF
-  $ Streamly.tapOffsetEvery 500000 500000 (Streamly.Fold.drainBy (const $ P.liftIO $ putStrLn "loadToRecStream: 500,000")) 
-  $ Frames.Streamly.streamTable po fp
+                                $ Frames.Streamly.streamTable po fp
 {-# INLINEABLE loadToRecStream #-}
 
 -- load with cols qs
@@ -160,7 +159,7 @@ loadToRecList
   -> FilePath
   -> (F.Record rs -> Bool)
   -> K.Sem r [F.Record rs]
-loadToRecList po fp filterF = Streamly.toList $ K.streamlyToKnitS $ loadToRecStream po fp filterF 
+loadToRecList po fp filterF = K.streamlyToKnit $ Streamly.toList $ loadToRecStream po fp filterF 
 {-# INLINEABLE loadToRecList #-}
 
 loadToFrame
