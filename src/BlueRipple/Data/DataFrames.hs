@@ -51,7 +51,7 @@ import qualified Text.Pandoc                   as Pandoc
 
 import qualified Streamly as Streamly
 import qualified Streamly.Prelude as Streamly
-import qualified Streamly.Internal.Prelude as Streamly
+--import qualified Streamly.Internal.Prelude as Streamly
 import qualified Streamly.Internal.Data.Fold as Streamly.Fold
 
 import qualified Frames.ParseableTypes         as FP
@@ -174,7 +174,7 @@ loadToFrame
   -> (F.Record rs -> Bool)
   -> K.Sem r (F.FrameRec rs)
 loadToFrame po fp filterF = do
-  frame <- liftIO $ FI.inCoreAoS $ toPipes $ Streamly.filter filterF $ Frames.Streamly.streamTable po fp
+  frame <- K.streamlyToKnit $ Frames.Streamly.inCoreAoS $ Streamly.filter filterF $ Frames.Streamly.streamTable po fp
   let reportRows :: Foldable f => f x -> FilePath -> K.Sem r ()
       reportRows f fn =
         K.logLE K.Diagnostic
