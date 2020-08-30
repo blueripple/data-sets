@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e2e61e5f5fb8f799392ec224e3e4c8075e20574975cc33b634b357df10f32096
+-- hash: ed026f705b6e234dcf073af950fc4e0cd2a31b33dc49aee6b04e36be57b239d3
 
 name:           blueripple-data-sets
 version:        0.1.0.0
@@ -34,12 +34,16 @@ data-files:
     election/1976-2016-president_orig.csv
     election/1976-2018-house.csv
     election/1976-2018-house_v5.csv
+    election/1976-2018-house_v5_u1.csv
     election/DetailedTurnoutByAgeSexEducation2010-2018.csv
     election/DetailedTurnoutByAgeSexRace2010-2018.csv
     election/EdisonExitPoll2018.csv
     election/electionResult2018.csv
     election/electoral_college.csv
     election/StateTurnout.csv
+    campaign-finance/allHouseSpendingThrough20200827.csv
+    campaign-finance/allMoney2020.csv
+    campaign-finance/allSenateSpendingThrough20200827.csv
     campaign-finance/allSpendingFrom20180801Through20181106.csv
     campaign-finance/allSpendingThrough20180731.csv
     campaign-finance/allSpendingThrough20181106.csv
@@ -71,7 +75,7 @@ library
       Frames
     , Frames-map-reduce
     , Frames-utils
-    , base >=4.12.0 && <4.13
+    , base >=4.12.0 && <4.14
     , containers >=0.5.0 && <0.7
     , directory >=1.3.3.0 && <1.4.0.0
     , exceptions >=0.10.4 && <0.11
@@ -82,8 +86,7 @@ library
     , pandoc >=2.9
     , pipes
     , polysemy >=1.2
-    , polysemy-plugin
-    , polysemy-zoo >=0.7.0 && <0.8    
+    , polysemy-zoo >=0.7.0 && <0.8
     , streamly >=0.7.2 && <0.8
     , text >=1.2.3 && <1.3
     , vinyl
