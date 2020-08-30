@@ -2,7 +2,7 @@ packages: . ~/DataScience/knit-haskell
 jobs: 4
 with-compiler: ghc
 
-allow-newer: hashable, random
+allow-newer: hashable, random         
 
 
 -- ghc-8.8 forks

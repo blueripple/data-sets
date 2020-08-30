@@ -35,6 +35,7 @@ library:
   - pipes
   - polysemy >= 1.2
   - polysemy-zoo >= 0.7.0 && < 0.8
+  - polysemy-plugin
   - streamly >= 0.7.2 && < 0.8
   - text >=1.2.3 && <1.3
   - vinyl
