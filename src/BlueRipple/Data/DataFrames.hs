@@ -69,8 +69,10 @@ F.tableTypes' (F.rowGen (framesPath forecastAndSpendingCSV)) { F.rowTypeName = "
 
 F.tableTypes "ElectionResults" (framesPath electionResultsCSV)
 F.tableTypes "AngryDems" (framesPath angryDemsCSV)
+F.tableTypes "AllMoney2020" (framesPath allMoney2020CSV)
 F.tableTypes "HouseElections" (framesPath houseElectionsCSV)
 F.tableTypes "PresidentialByState" (framesPath presidentialByStateCSV)
+F.tableTypes "HousePolls2020" (framesPath housePolls2020CSV)
 F.tableTypes "ContextDemographics" (framesPath contextDemographicsCSV)
 F.tableTypes "CVAPByCDAndRace_Raw" (framesPath cvapByCDAndRace2014_2018CSV)
 F.tableTypes "PopulationsByCounty_Raw" (framesPath popsByCountyCSV) 

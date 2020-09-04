@@ -42,6 +42,9 @@ forecastAndSpendingCSV =
 houseElectionsCSV :: FilePath
 houseElectionsCSV = electionDir ++ "1976-2018-house_v5_u1.csv"
 
+allMoney2020CSV :: FilePath
+allMoney2020CSV = campaignFinanceDir ++ "allMoney_20200902.csv"
+
 detailedASRTurnoutCSV :: FilePath 
 detailedASRTurnoutCSV =
   electionDir ++ "DetailedTurnoutByAgeSexRace2010-2018.csv"
@@ -64,6 +67,9 @@ presidentialByStateCSV = electionDir ++ "1976-2016-president.csv"
 
 electorsCSV :: FilePath 
 electorsCSV = electionDir ++ "electoral_college.csv"
+
+housePolls2020CSV :: FilePath
+housePolls2020CSV = electionDir ++ "HousePolls538_20200904.csv"
 
 contextDemographicsCSV :: FilePath
 contextDemographicsCSV =
