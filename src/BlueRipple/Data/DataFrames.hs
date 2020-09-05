@@ -60,19 +60,25 @@ import qualified Frames.Streamly as Frames.Streamly
 
 -- pre-declare cols with non-standard types
 F.declareColumn "Date" ''FP.FrameDay
+F.declareColumn "StartDate" ''FP.FrameDay
+F.declareColumn "EndDate" ''FP.FrameDay
+F.declareColumn "ElectionDate" ''FP.FrameDay
+
 
 F.tableTypes "TotalSpending" (framesPath totalSpendingCSV)
 
 F.tableTypes' (F.rowGen (framesPath forecastAndSpendingCSV)) { F.rowTypeName = "ForecastAndSpending"
-                                                , F.columnUniverse = Proxy :: Proxy FP.ColumnsWithDayAndLocalTime
-                                                }
+                                                             , F.columnUniverse = Proxy :: Proxy FP.ColumnsWithDayAndLocalTime
+                                                             }
 
 F.tableTypes "ElectionResults" (framesPath electionResultsCSV)
 F.tableTypes "AngryDems" (framesPath angryDemsCSV)
 F.tableTypes "AllMoney2020" (framesPath allMoney2020CSV)
 F.tableTypes "HouseElections" (framesPath houseElectionsCSV)
 F.tableTypes "PresidentialByState" (framesPath presidentialByStateCSV)
-F.tableTypes "HousePolls2020" (framesPath housePolls2020CSV)
+F.tableTypes' (F.rowGen (framesPath housePolls2020CSV)) { F.rowTypeName = "HousePolls2020"
+                                                        , F.columnUniverse = Proxy :: Proxy FP.ColumnsWithDayAndLocalTime
+                                                        }
 F.tableTypes "ContextDemographics" (framesPath contextDemographicsCSV)
 F.tableTypes "CVAPByCDAndRace_Raw" (framesPath cvapByCDAndRace2014_2018CSV)
 F.tableTypes "PopulationsByCounty_Raw" (framesPath popsByCountyCSV) 

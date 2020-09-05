@@ -1,43 +1,15 @@
-packages: . ~/DataScience/knit-haskell
+packages: . ~/DataScience/Frames-utils
 jobs: 4
 with-compiler: ghc
 
 allow-newer: hashable, random         
 
-
--- ghc-8.8 forks
-             
---source-repository-package
---  type: git
---  location: https://github.com/adamConnerSax/Frames
---  tag: 5a8658444c3a0f33c1a46fe6ea497de5a7d777d4
-
---source-repository-package
---  type: git
---  location: https://github.com/adamConnerSax/random-fu
---  tag: 81e67b5596c173720032f7fa83610c4e4138b839
---  subdir: random-fu
-
---source-repository-package
---  type: git
---  location: https://github.com/adamConnerSax/random-fu
---  tag: 81e67b5596c173720032f7fa83610c4e4138b839
---  subdir: random-source
-
---source-repository-package
---  type: git
---  location: https://github.com/adamConnerSax/random-fu
---  tag: 81e67b5596c173720032f7fa83610c4e4138b839
---  subdir: rvar
-    
---- ghc-8.8 forks ends
-
---source-repository-package
---  type: git
---  location: https://github.com/adamConnerSax/knit-haskell
---  tag: eb747db16ad3616e23d58becdf0c04223ff3bef4
-
 source-repository-package
   type: git
-  location: https://github.com/adamConnerSax/Frames-utils
-  tag: 06dd975da0f53af952e9e25dd02a50dda43ced60
+  location: https://github.com/adamConnerSax/knit-haskell
+  tag: e06f935d7f12fd1939e12b96e2ea1a839fb98a09
+
+--source-repository-package
+--  type: git
+--  location: https://github.com/adamConnerSax/Frames-utils
+--  tag: 06dd975da0f53af952e9e25dd02a50dda43ced60

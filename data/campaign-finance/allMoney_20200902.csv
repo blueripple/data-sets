@@ -1,4 +1,4 @@
-candidate_id,candidate_name,state_abbreviation,congressional_district,qparty,cash_on_hand,disbursements,receipts,ind_support,ind_oppose,party_expenditures
+candidate_id,candidate_name,state_abbreviation,congressional_district,party,cash_on_hand,disbursements,receipts,ind_support,ind_oppose,party_expenditures
 H0AL01055,"CARL, JERRY LEE, JR",AL,1,Republican,71695,1670657,1742352,144203,1159877,0
 H0AL01063,"LAMBERT, DOUGLAS WESTLEY III",AL,1,Republican,0,182565,182565,0,0,0
 H0AL01071,"PRINGLE, CHRISTOPHER PAUL",AL,1,Republican,0,491716,491716,0,0,0
