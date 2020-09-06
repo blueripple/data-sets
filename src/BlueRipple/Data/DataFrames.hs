@@ -56,7 +56,8 @@ import qualified Streamly.Internal.Data.Fold as Streamly.Fold
 
 import qualified Frames.ParseableTypes         as FP
 import qualified Frames.MaybeUtils             as FM
-import qualified Frames.Streamly as Frames.Streamly
+import qualified Frames.Streamly.CSV           as Frames.Streamly
+import qualified Frames.Streamly.InCore        as Frames.Streamly
 
 -- pre-declare cols with non-standard types
 F.declareColumn "Date" ''FP.FrameDay
@@ -116,7 +117,7 @@ loadToRecStream
   -> (F.Record rs -> Bool)
   -> t m (F.Record rs)
 loadToRecStream po fp filterF = Streamly.filter filterF
-                                $ Frames.Streamly.streamTable po fp
+                                $ Frames.Streamly.readTableOpt po fp
 {-# INLINEABLE loadToRecStream #-}
 
 -- load with cols qs
@@ -143,7 +144,7 @@ loadToMaybeRecStream
 loadToMaybeRecStream po fp filterF = 
   Streamly.filter filterF
   $ Streamly.map F.rcast
-  $ Frames.Streamly.streamTableMaybe @qs po fp
+  $ Frames.Streamly.readTableMaybeOpt @qs po fp
 {-
     let reportRows :: Streamly.SerialT (K.Sem r) x -> FilePath -> K.Sem r ()
       reportRows str fn = do
@@ -182,7 +183,7 @@ loadToFrame
   -> (F.Record rs -> Bool)
   -> K.Sem r (F.FrameRec rs)
 loadToFrame po fp filterF = do
-  frame <- K.streamlyToKnit $ Frames.Streamly.inCoreAoS $ Streamly.filter filterF $ Frames.Streamly.streamTable po fp
+  frame <- K.streamlyToKnit $ Frames.Streamly.inCoreAoS $ Streamly.filter filterF $ Frames.Streamly.readTableOpt po fp
   let reportRows :: Foldable f => f x -> FilePath -> K.Sem r ()
       reportRows f fn =
         K.logLE K.Diagnostic
