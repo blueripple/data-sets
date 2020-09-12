@@ -99,8 +99,10 @@ F.tableTypes "States" (framesPath statesCSV)
 F.tableTypes "StateCountyCD" (framesPath stateCounty116CDCSV)
 F.tableTypes "StateCountyTractPUMA" (framesPath stateCountyTractPUMACSV)
 F.tableTypes "CountyToCD116" (framesPath countyToCD116CSV)
-F.tableTypes "CD116ToStateLeg2016" (framesPath cd116ToStateLeg2016CSV)
-F.tableTypes "PUMA2012ToStateLeg2016" (framesPath puma2012ToStateLeg2016CSV)
+F.tableTypes "CD116FromStateLower2016" (framesPath cd116FromStateLower2016CSV)
+F.tableTypes "CD116FromStateUpper2016" (framesPath cd116FromStateUpper2016CSV)
+F.tableTypes "StateLower2016FromPUMA" (framesPath stateLower2016FromPUMACSV)
+F.tableTypes "StateUpper2016FromPUMA" (framesPath stateUpper2016FromPUMACSV)
 
 
 logLengthF :: T.Text -> Streamly.Fold.Fold K.StreamlyM a ()
