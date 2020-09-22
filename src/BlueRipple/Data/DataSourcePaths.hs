@@ -118,7 +118,7 @@ stateLower2016FromPUMACSV :: FilePath
 stateLower2016FromPUMACSV = dictionariesDir ++ "StateLower2016FromPUMA.csv"
 
 stateUpper2016FromPUMACSV :: FilePath
-stateUpper2016FromPUMACSV = dictionariesDir ++ "StateLower2016FromPUMA.csv"
+stateUpper2016FromPUMACSV = dictionariesDir ++ "StateUpper2016FromPUMA.csv"
 
 angryDemsCSV :: FilePath 
 angryDemsCSV = otherDir ++ "angryDemsContributions20181203.csv"
