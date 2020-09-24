@@ -90,11 +90,16 @@ cvapByCDAndRace2014_2018CSV =
 popsByCountyCSV :: FilePath 
 popsByCountyCSV = demographicDir ++ "populationsByCounty.csv"
 
+{-
 puma2012ToCD116CSV :: FilePath 
 puma2012ToCD116CSV = demographicDir ++ "puma2012ToCD116.csv"
 
 puma2000ToCD116CSV :: FilePath 
 puma2000ToCD116CSV = demographicDir ++ "puma2000ToCD116.csv"
+-}
+
+cd116FromPUMA2012CSV:: FilePath
+cd116FromPUMA2012CSV = dictionariesDir ++ "cd116FromPUMA2012.csv"
 
 statesCSV :: FilePath 
 statesCSV = dictionariesDir ++ "states.csv"
