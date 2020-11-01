@@ -101,6 +101,16 @@ puma2000ToCD116CSV = demographicDir ++ "puma2000ToCD116.csv"
 cd116FromPUMA2012CSV:: FilePath
 cd116FromPUMA2012CSV = dictionariesDir ++ "cd116FromPUMA2012.csv"
 
+cd115FromPUMA2012CSV:: FilePath
+cd115FromPUMA2012CSV = dictionariesDir ++ "cd115FromPUMA2012.csv"
+
+cd114FromPUMA2012CSV:: FilePath
+cd114FromPUMA2012CSV = dictionariesDir ++ "cd114FromPUMA2012.csv"
+
+cd113FromPUMA2012CSV:: FilePath
+cd113FromPUMA2012CSV = dictionariesDir ++ "cd113FromPUMA2012.csv"
+
+
 statesCSV :: FilePath 
 statesCSV = dictionariesDir ++ "states.csv"
 

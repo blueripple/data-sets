@@ -83,9 +83,8 @@ F.tableTypes' (F.rowGen (framesPath housePolls2020CSV)) { F.rowTypeName = "House
 F.tableTypes "ContextDemographics" (framesPath contextDemographicsCSV)
 F.tableTypes "CVAPByCDAndRace_Raw" (framesPath cvapByCDAndRace2014_2018CSV)
 F.tableTypes "PopulationsByCounty_Raw" (framesPath popsByCountyCSV) 
---F.tableTypes "PUMA2012ToCD116"       (framesPath puma2012ToCD116CSV)
---F.tableTypes "PUMA2000ToCD116"       (framesPath puma2000ToCD116CSV)
-F.tableTypes "CD116FromPUMA2012"       (framesPath cd116FromPUMA2012CSV)
+-- NB: cd115, cd114, cd113 are all also present and have the same table-types
+F.tableTypes "CDFromPUMA2012"       (framesPath cd116FromPUMA2012CSV)
 
 
 F.tableTypes "TurnoutASR"          (framesPath detailedASRTurnoutCSV)

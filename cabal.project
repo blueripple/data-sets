@@ -2,7 +2,7 @@ packages: .
 jobs: 4
 with-compiler: ghc
 
-allow-newer: hashable, random, cereal-time:time         
+allow-newer: base, hashable, pandoc:random, cereal-time:time         
 
 source-repository-package
   type: git
@@ -12,7 +12,7 @@ source-repository-package
 source-repository-package
   type: git
   location: https://github.com/adamConnerSax/Frames-utils
-  tag: bdcca5fc848759a344473f00874555159728d372
+  tag: 6735d38d026cae8a661c86633e5d9bb445bd58d7
 
 source-repository-package
   type: git
