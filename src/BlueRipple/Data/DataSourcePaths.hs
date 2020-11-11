@@ -110,6 +110,9 @@ cd114FromPUMA2012CSV = dictionariesDir ++ "cd114FromPUMA2012.csv"
 cd113FromPUMA2012CSV:: FilePath
 cd113FromPUMA2012CSV = dictionariesDir ++ "cd113FromPUMA2012.csv"
 
+county2014FromPUMA2012CSV :: FilePath
+county2014FromPUMA2012CSV = dictionariesDir ++ "2012PUMATo2014County.csv"
+
 
 statesCSV :: FilePath 
 statesCSV = dictionariesDir ++ "states.csv"

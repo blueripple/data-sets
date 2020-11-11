@@ -104,7 +104,7 @@ F.tableTypes "CD116FromStateLower2016" (framesPath cd116FromStateLower2016CSV)
 F.tableTypes "CD116FromStateUpper2016" (framesPath cd116FromStateUpper2016CSV)
 F.tableTypes "StateLower2016FromPUMA" (framesPath stateLower2016FromPUMACSV)
 F.tableTypes "StateUpper2016FromPUMA" (framesPath stateUpper2016FromPUMACSV)
-
+F.tableTypes "CountyFromPUMA" (framesPath county2014FromPUMA2012CSV)
 
 logLengthF :: T.Text -> Streamly.Fold.Fold K.StreamlyM a ()
 logLengthF t = Streamly.Fold.mapM (\n -> K.logStreamly K.Diagnostic $ t <> " " <> (T.pack $ show n)) Streamly.Fold.length
