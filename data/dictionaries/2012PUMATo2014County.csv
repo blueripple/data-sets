@@ -1,4 +1,4 @@
-StateFIPS,PUMA,CountyFIPS,StateAbbreviation,CountyName,PUMAname,Population2016,FracPUMAFromCounty,FracCountyFromPUMA
+StateFIPS,PUMA,CountyFIPS,StateAbbreviation,CountyName,PUMAname,Population2016,FracPUMAInCounty,FracCountyInPUMA
 1,100,1033,AL,Colbert AL,"Lauderdale, Colbert, Franklin & Marion (Northeast) Counties",54216,0.292,1
 1,100,1059,AL,Franklin AL,"Lauderdale, Colbert, Franklin & Marion (Northeast) Counties",31628,0.17,1
 1,100,1077,AL,Lauderdale AL,"Lauderdale, Colbert, Franklin & Marion (Northeast) Counties",92318,0.497,1
