@@ -76,13 +76,14 @@ F.tableTypes "ElectionResults" (framesPath electionResultsCSV)
 F.tableTypes "AngryDems" (framesPath angryDemsCSV)
 F.tableTypes "AllMoney2020" (framesPath allMoney2020CSV)
 F.tableTypes "HouseElections" (framesPath houseElectionsCSV)
+F.tableTypes "SenateElections" (framesPath senateElectionsCSV)
 F.tableTypes "PresidentialByState" (framesPath presidentialByStateCSV)
 F.tableTypes' (F.rowGen (framesPath housePolls2020CSV)) { F.rowTypeName = "HousePolls2020"
                                                         , F.columnUniverse = Proxy :: Proxy FP.ColumnsWithDayAndLocalTime
                                                         }
 F.tableTypes "ContextDemographics" (framesPath contextDemographicsCSV)
 F.tableTypes "CVAPByCDAndRace_Raw" (framesPath cvapByCDAndRace2014_2018CSV)
-F.tableTypes "PopulationsByCounty_Raw" (framesPath popsByCountyCSV) 
+F.tableTypes "PopulationsByCounty_Raw" (framesPath popsByCountyCSV)
 -- NB: cd115, cd114, cd113 are all also present and have the same table-types
 F.tableTypes "CDFromPUMA2012"       (framesPath cd116FromPUMA2012CSV)
 
@@ -147,7 +148,7 @@ loadToMaybeRecStream
   -> FilePath
   -> (F.Rec (Maybe F.:. F.ElField) rs -> Bool)
   -> t m (F.Rec (Maybe F.:. F.ElField) rs)
-loadToMaybeRecStream po fp filterF = 
+loadToMaybeRecStream po fp filterF =
   Streamly.filter filterF
   $ Streamly.map F.rcast
   $ Frames.Streamly.readTableMaybeOpt @qs po fp
@@ -174,7 +175,7 @@ loadToRecList
   -> FilePath
   -> (F.Record rs -> Bool)
   -> K.Sem r [F.Record rs]
-loadToRecList po fp filterF = K.streamlyToKnit $ Streamly.toList $ loadToRecStream po fp filterF 
+loadToRecList po fp filterF = K.streamlyToKnit $ Streamly.toList $ loadToRecStream po fp filterF
 {-# INLINEABLE loadToRecList #-}
 
 loadToFrame
@@ -201,7 +202,7 @@ loadToFrame po fp filterF = do
 {-# INLINEABLE loadToFrame #-}
 
 processMaybeRecStream
-  :: forall rs 
+  :: forall rs
      .(V.RFoldMap rs
      , V.RPureConstrained V.KnownField rs
      , V.RecApplicative rs
@@ -222,7 +223,7 @@ processMaybeRecStream fixMissing filterRows maybeRecS = do
     $ Streamly.tap (logLengthF "Length after fixing and dropping: ")
     $ Streamly.mapMaybe F.recMaybe
     $ Streamly.tap (logMissingF "missing after fixing: ")
-    $ Streamly.map fixMissing 
+    $ Streamly.map fixMissing
     $ Streamly.tap (logMissingF "missing before fixing: ")
     $ maybeRecS
 {-# INLINEABLE processMaybeRecStream #-}
@@ -278,7 +279,7 @@ fromPipes = Streamly.unfoldrM unconsP
     where
     -- Adapt P.next to return a Maybe instead of Either
     unconsP p = P.next p >>= either (\_ -> return Nothing) (return . Just)
-  
+
 loadToRecList
   :: forall rs effs
    . ( MonadIO (K.Sem effs)
@@ -293,7 +294,7 @@ loadToRecList
   -> K.Sem effs [F.Record rs]
 loadToRecList po fp filterF = do
   let rawRecStream = fromPipes $ F.readTableOpt po fp -- MonadSafe m => SerialT m (F.Record rs)
-      filtered = Streamly.filter filterF rawRecStream  
+      filtered = Streamly.filter filterF rawRecStream
   asRecList <- liftIO $ F.runSafeT $ Streamly.toList filtered
   -- NB: if we didn't already need to be strict, this would require at least spine strictness
   -- to compute the length!
@@ -389,5 +390,5 @@ processMaybeRecs fixMissing filterRows maybeRecs =
     K.logLE K.Diagnostic "Rows after fixing and dropping missing:"
     K.logLE K.Diagnostic (T.pack $ show $ length droppedMissing)
     K.logLE K.Diagnostic "Rows after filtering: "
-    K.logLE K.Diagnostic (T.pack $ show $ length filtered)    
+    K.logLE K.Diagnostic (T.pack $ show $ length filtered)
     return filtered
