@@ -21,6 +21,7 @@ module BlueRipple.Data.DataFrames
   )
 where
 
+import Prelude hiding (State)
 import           BlueRipple.Data.DataSourcePaths
 import qualified Knit.Report                   as K
 import qualified Knit.Utilities.Streamly as K
@@ -76,7 +77,10 @@ F.tableTypes "ElectionResults" (framesPath electionResultsCSV)
 F.tableTypes "AngryDems" (framesPath angryDemsCSV)
 F.tableTypes "AllMoney2020" (framesPath allMoney2020CSV)
 F.tableTypes "HouseElections" (framesPath houseElectionsCSV)
-F.tableTypes "SenateElections" (framesPath senateElectionsCSV)
+F.tableTypes' (F.rowGen (framesPath senateElectionsCSV)) { F.rowTypeName = "SenateElections"
+                                                        , F.tablePrefix = "Senate"
+                                                        }
+
 F.tableTypes "PresidentialByState" (framesPath presidentialByStateCSV)
 F.tableTypes' (F.rowGen (framesPath housePolls2020CSV)) { F.rowTypeName = "HousePolls2020"
                                                         , F.columnUniverse = Proxy :: Proxy FP.ColumnsWithDayAndLocalTime

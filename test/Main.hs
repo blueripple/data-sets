@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-
+{-# LANGUAGE TypeApplications #-}
 import qualified Frames
 import qualified Frames.CSV as Frames
 import qualified BlueRipple.Data.DataFrames as BR
@@ -11,9 +11,10 @@ import qualified Control.Foldl as Foldl
 
 main :: IO ()
 main = do
-  resE <- Knit.consumeKnitEffectStack (Knit.defaultKnitConfig Nothing) $ do
-    f <- BR.loadToFrame @(Frames.RecordColumns BR.SenateElections) Frames.defaultParserOptions BR.senateElectionsCSV
+  let knitConfig = (Knit.defaultKnitConfig Nothing ) { Knit.logIf = const True}
+  resE <- Knit.consumeKnitEffectStack knitConfig $ do
+    f <- BR.loadToRecListChecked @(Frames.RecordColumns BR.SenateElections) Frames.defaultParser (BR.framesPath BR.senateElectionsCSV) (const True)
     putTextLn $ Text.intercalate "\n" $ fmap show $ Foldl.fold Foldl.list f
   case resE of
-    Left err -> putTextLn $ "Error: " <> err
+    Left err -> putTextLn $ "Error: " <> show err
     Right () -> putTextLn $ "Success!"
