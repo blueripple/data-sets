@@ -21,42 +21,12 @@ extra-source-files:
     Changelog.md
     Readme.md
 data-files:
-    demographic/ageSexEducationDemographics2010-2017.csv
-    demographic/ageSexEducationDemographics2010-2018.csv
-    demographic/ageSexRaceDemographics2010-2017.csv
-    demographic/ageSexRaceDemographics2010-2018.csv
-    demographic/contextDemographicsByDistrict.csv
-    demographic/CVAPByCD2014-2018.csv
-    demographic/populationsByCounty.csv
-    demographic/puma2000ToCD116.csv
-    demographic/puma2012ToCD116.csv
-    election/1976-2016-president.csv
-    election/1976-2016-president_orig.csv
-    election/1976-2018-house.csv
-    election/1976-2018-house_v5.csv
-    election/1976-2018-house_v5_u1.csv
-    election/1976-2020-senate.csv
-    election/DetailedTurnoutByAgeSexEducation2010-2018.csv
-    election/DetailedTurnoutByAgeSexRace2010-2018.csv
-    election/EdisonExitPoll2018.csv
-    election/electionResult2018.csv
-    election/electoral_college.csv
-    election/StateTurnout.csv
-    campaign-finance/allHouseSpendingThrough20200827.csv
-    campaign-finance/allMoney2020.csv
-    campaign-finance/allSenateSpendingThrough20200827.csv
-    campaign-finance/allSpendingFrom20180801Through20181106.csv
-    campaign-finance/allSpendingThrough20180731.csv
-    campaign-finance/allSpendingThrough20181106.csv
-    campaign-finance/forecastAndSpending.csv
-    dictionaries/2010CountyToCD116.csv
-    dictionaries/2010StateCountyTractPUMA.csv
-    dictionaries/StateCounty116CD.csv
-    dictionaries/states.csv
-    geo/cd116_2018.topojson
-    geo/cd116_2018_dense.topojson
-    other/angryDemsContributions20181203.csv
-    other/angryDemsContributions20181203_orig.csv
+    demographic/*.csv
+    election/*.csv
+    campaign-finance/*.csv
+    dictionaries/*.csv
+    geo/*.topojson
+    other/*.csv
 data-dir:       data
 
 source-repository head
