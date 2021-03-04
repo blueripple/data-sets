@@ -50,8 +50,8 @@ Washington,53,WA,West,Pacific
 West Virginia,54,WV,South,SouthAtlantic
 Wisconsin,55,WI,Midwest,EastNorthCentral
 Wyoming,56,WY,West,Mountain
-American Samoa,60,AS,Territory,Territory
-Guam,66,GU,Territory,Territory
-Northern Mariana Islands,69,MP,Territory,Territory
-Puerto Rico,72,PR,Territory,Territory
-Virgin Islands,78,VI,Territory,Territory
+American Samoa,60,AS,OtherRegion,OtherDivision
+Guam,66,GU,OtherRegion,OtherDivision
+Northern Mariana Islands,69,MP,OtherRegion,OtherDivision
+Puerto Rico,72,PR,OtherRegion,OtherDivision
+Virgin Islands,78,VI,OtherRegion,OtherDivision
