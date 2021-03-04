@@ -7,7 +7,7 @@ cabal-version: 3.0
 -- hash: 2be2bb936e6948877d2d05f4eed593fa0232d9c355405af99d47da9bd7f3ac13
 
 name:           blueripple-data-sets
-version:        0.1.0.0
+version:        0.2.0.0
 synopsis:       data-sets for Blue Ripple Politics along with Frames types and loaders for them
 category:       Numeric
 homepage:       https://github.com/blueripple/data-sets#readme
