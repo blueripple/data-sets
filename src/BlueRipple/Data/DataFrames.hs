@@ -30,15 +30,10 @@ import qualified Polysemy as Polysemy
 import qualified Polysemy.Error as Polysemy
 
 import qualified Control.Foldl                 as FL
-import           Control.Monad.IO.Class         ( MonadIO(liftIO) )
-import           Control.Monad.Catch            ( SomeException, displayException )
 import qualified Control.Monad.Catch.Pure      as Exceptions
 import qualified Data.List                     as L
 import qualified Data.Map as Map
-import           Data.Maybe                     ( catMaybes )
-import           Data.Proxy                     ( Proxy(..) )
 import qualified Data.Text                     as T
-import           Data.Text                      ( Text )
 import qualified Data.Vinyl                    as V
 import qualified Frames                        as F
 import qualified Frames.CSV                    as F
