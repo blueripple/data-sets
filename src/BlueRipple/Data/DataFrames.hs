@@ -112,10 +112,12 @@ logLengthF t = Streamly.Fold.mapM (\n -> K.logStreamly K.Diagnostic $ t <> " " <
 loadToRecStream
   :: forall rs t m
   . ( Monad m
-    , MonadIO m
+    , Streamly.MonadAsync m
+--    , MonadIO m
     , Exceptions.MonadCatch m
-    , F.ReadRec rs
+--    , F.ReadRec rs
     , V.RMap rs
+    , Frames.Streamly.StrictReadRec rs
     , Streamly.IsStream t
     )
   => F.ParserOptions
@@ -132,7 +134,8 @@ loadToRecStream po fp filterF = Streamly.filter filterF
 loadToMaybeRecStream
   :: forall qs rs t m
   . ( Monad m
-    , MonadIO m
+    , Streamly.MonadAsync m
+--    , MonadIO m
     , Exceptions.MonadCatch m
     , Streamly.IsStream t
     , F.ReadRec qs
@@ -167,7 +170,7 @@ loadToMaybeRecStream po fp filterF =
 loadToRecList
   :: forall rs r
   . ( K.KnitEffects r
-    , F.ReadRec rs
+    , Frames.Streamly.StrictReadRec rs
     , V.RMap rs
     )
   => F.ParserOptions
@@ -180,7 +183,7 @@ loadToRecList po fp filterF = K.streamlyToKnit $ Streamly.toList $ loadToRecStre
 loadToFrame
   :: forall rs r
    . ( K.KnitEffects r
-     , F.ReadRec rs
+     , Frames.Streamly.StrictReadRec rs
      , FI.RecVec rs
      , V.RMap rs
      )
