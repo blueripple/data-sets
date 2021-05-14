@@ -73,9 +73,11 @@ F.tableTypes "AngryDems" (framesPath angryDemsCSV)
 F.tableTypes "AllMoney2020" (framesPath allMoney2020CSV)
 F.tableTypes "HouseElections" (framesPath houseElectionsCSV)
 F.tableTypes' (F.rowGen (framesPath senateElectionsCSV)) { F.rowTypeName = "SenateElections"
-                                                        , F.tablePrefix = "Senate"
-                                                        }
-F.tableTypes "ElectionIntegrity2016" (framesPath electionIntegrityByState2016CSV)
+                                                         , F.tablePrefix = "Senate"
+                                                         }
+F.tableTypes' (F.rowGen  (framesPath electionIntegrityByState2016CSV)) { F.rowTypeName = "ElectionIntegrityByState2016"
+                                                                       , F.tablePrefix = "PEI"
+                                                                       }
 
 F.tableTypes "PresidentialByState" (framesPath presidentialByStateCSV)
 F.tableTypes' (F.rowGen (framesPath housePolls2020CSV)) { F.rowTypeName = "HousePolls2020"
