@@ -75,6 +75,7 @@ F.tableTypes "HouseElections" (framesPath houseElectionsCSV)
 F.tableTypes' (F.rowGen (framesPath senateElectionsCSV)) { F.rowTypeName = "SenateElections"
                                                         , F.tablePrefix = "Senate"
                                                         }
+F.tableTypes "ElectionIntegrity2016" (framesPath electionIntegrityByState2016CSV)
 
 F.tableTypes "PresidentialByState" (framesPath presidentialByStateCSV)
 F.tableTypes' (F.rowGen (framesPath housePolls2020CSV)) { F.rowTypeName = "HousePolls2020"
