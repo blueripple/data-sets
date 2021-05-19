@@ -96,6 +96,10 @@ popsByCountyCSV = demographicDir ++ "populationsByCounty.csv"
 electionIntegrityByState2016CSV :: FilePath
 electionIntegrityByState2016CSV = electionDir ++ "EIP_Electoral_Integrity_2016.csv"
 
+electionIntegrityByState2018CSV :: FilePath
+electionIntegrityByState2018CSV = electionDir ++ "EIP_Electoral_Integrity_2018.csv"
+
+
 {-
 puma2012ToCD116CSV :: FilePath
 puma2012ToCD116CSV = demographicDir ++ "puma2012ToCD116.csv"

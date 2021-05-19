@@ -75,9 +75,13 @@ F.tableTypes "HouseElections" (framesPath houseElectionsCSV)
 F.tableTypes' (F.rowGen (framesPath senateElectionsCSV)) { F.rowTypeName = "SenateElections"
                                                          , F.tablePrefix = "Senate"
                                                          }
-F.tableTypes' (F.rowGen  (framesPath electionIntegrityByState2016CSV)) { F.rowTypeName = "ElectionIntegrityByState2016"
+F.tableTypes' (F.rowGen  (framesPath electionIntegrityByState2018CSV)) { F.rowTypeName = "ElectionIntegrityByState"
                                                                        , F.tablePrefix = "PEI"
                                                                        }
+
+--F.tableTypes' (F.rowGen  (framesPath electionIntegrityByState2016CSV)) { F.rowTypeName = "ElectionIntegrityByState"
+--                                                                       , F.tablePrefix = "PEI"
+
 
 F.tableTypes "PresidentialByState" (framesPath presidentialByStateCSV)
 F.tableTypes' (F.rowGen (framesPath housePolls2020CSV)) { F.rowTypeName = "HousePolls2020"
