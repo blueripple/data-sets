@@ -1,4 +1,5 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
+{-# LANGUAGE CPP                 #-}
 {-# LANGUAGE DataKinds           #-}
 {-# LANGUAGE GADTs               #-}
 {-# LANGUAGE FlexibleContexts    #-}
@@ -45,10 +46,14 @@ import qualified Pipes.Prelude                 as P
 
 import qualified Text.Pandoc                   as Pandoc
 
-import qualified Streamly as Streamly
 import qualified Streamly.Prelude as Streamly
---import qualified Streamly.Internal.Prelude as Streamly
 import qualified Streamly.Internal.Data.Fold as Streamly.Fold
+
+#if MIN_VERSION_streamly(0,8,0)
+#else
+import qualified Streamly as Streamly
+--import qualified Streamly.Internal.Prelude as Streamly
+#endif
 
 import qualified Frames.ParseableTypes         as FP
 import qualified Frames.MaybeUtils             as FM
@@ -230,7 +235,11 @@ processMaybeRecStream
 processMaybeRecStream fixMissing filterRows maybeRecS = do
   let addMissing m l = Map.insertWith (+) l 1 m
       addMissings m = FL.fold (FL.Fold addMissing m id)
+#if MIN_VERSION_streamly(0,8,0)
+      whatsMissingF = Streamly.Fold.mkFold (\m a -> Streamly.Fold.Partial $ addMissings m (FM.whatsMissingRow a)) (Streamly.Fold.Partial Map.empty) id
+#else
       whatsMissingF = Streamly.Fold.mkPure (\m a -> addMissings m (FM.whatsMissingRow a)) Map.empty id
+#endif
       logMissingF :: T.Text -> Streamly.Fold.Fold K.StreamlyM (F.Rec (Maybe F.:. F.ElField) rs) ()
       logMissingF t = Streamly.Fold.mapM (\x  -> K.logStreamly K.Diagnostic $ t <> (T.pack $ show x)) whatsMissingF
   Streamly.filter filterRows
