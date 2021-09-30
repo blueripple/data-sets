@@ -39,7 +39,6 @@ import qualified Data.Vinyl                    as V
 import qualified Frames                        as F
 import qualified Frames.CSV                    as F
 import qualified Frames.InCore                 as FI
-import qualified Frames.TH                     as F
 
 import qualified Pipes                         as P
 import qualified Pipes.Prelude                 as P
@@ -59,6 +58,7 @@ import qualified Frames.ParseableTypes         as FP
 import qualified Frames.MaybeUtils             as FM
 import qualified Frames.Streamly.CSV           as Frames.Streamly
 import qualified Frames.Streamly.InCore        as Frames.Streamly
+import qualified Frames.Streamly.TH as FS
 
 -- pre-declare cols with non-standard types
 F.declareColumn "Date" ''FP.FrameDay
@@ -67,77 +67,85 @@ F.declareColumn "EndDate" ''FP.FrameDay
 F.declareColumn "ElectionDate" ''FP.FrameDay
 
 
-F.tableTypes "TotalSpending" (framesPath totalSpendingCSV)
+FS.tableTypes "TotalSpending" (framesPath totalSpendingCSV)
 
-F.tableTypes' (F.rowGen (framesPath forecastAndSpendingCSV)) { F.rowTypeName = "ForecastAndSpending"
-                                                             , F.columnUniverse = Proxy :: Proxy FP.ColumnsWithDayAndLocalTime
-                                                             }
+FS.tableTypes' (FS.rowGen (framesPath forecastAndSpendingCSV)) { FS.rowTypeName = "ForecastAndSpending"
+                                                               , FS.columnUniverse = Proxy :: Proxy FP.ColumnsWithDayAndLocalTime
+                                                               }
 
-F.tableTypes "ElectionResults" (framesPath electionResultsCSV)
-F.tableTypes "AngryDems" (framesPath angryDemsCSV)
-F.tableTypes "AllMoney2020" (framesPath allMoney2020CSV)
-F.tableTypes "HouseElections" (framesPath houseElectionsCSV)
-F.tableTypes' (F.rowGen (framesPath senateElectionsCSV)) { F.rowTypeName = "SenateElections"
-                                                         , F.tablePrefix = "Senate"
-                                                         }
-F.tableTypes' (F.rowGen  (framesPath electionIntegrityByState2016CSV)) { F.rowTypeName = "ElectionIntegrityByState2016"
-                                                                       , F.tablePrefix = "PEI"
-                                                                       }
+FS.tableTypes "ElectionResults" (framesPath electionResultsCSV)
+FS.tableTypes "AngryDems" (framesPath angryDemsCSV)
+FS.tableTypes "AllMoney2020" (framesPath allMoney2020CSV)
+FS.tableTypes "HouseElections" (framesPath houseElectionsCSV)
+FS.tableTypes' (FS.rowGen (framesPath senateElectionsCSV)) { FS.rowTypeName = "SenateElections"
+                                                           , FS.tablePrefix = "Senate"
+                                                           }
+FS.tableTypes' (FS.rowGen  (framesPath electionIntegrityByState2016CSV)) { FS.rowTypeName = "ElectionIntegrityByState2016"
+                                                                         , FS.tablePrefix = "PEI"
+                                                                         }
 
-F.tableTypes' (F.rowGen  (framesPath electionIntegrityByState2018CSV)) { F.rowTypeName = "ElectionIntegrityByState2018"
-                                                                       , F.tablePrefix = "PEI"
-                                                                       }
+FS.tableTypes' (FS.rowGen  (framesPath electionIntegrityByState2018CSV)) { FS.rowTypeName = "ElectionIntegrityByState2018"
+                                                                         , FS.tablePrefix = "PEI"
+                                                                         }
 
 
 --F.tableTypes' (F.rowGen  (framesPath electionIntegrityByState2016CSV)) { F.rowTypeName = "ElectionIntegrityByState"
 --                                                                       , F.tablePrefix = "PEI"
 
 
-F.tableTypes "PresidentialByState" (framesPath presidentialByStateCSV)
-F.tableTypes' (F.rowGen (framesPath housePolls2020CSV)) { F.rowTypeName = "HousePolls2020"
-                                                        , F.columnUniverse = Proxy :: Proxy FP.ColumnsWithDayAndLocalTime
-                                                        }
-F.tableTypes "ContextDemographics" (framesPath contextDemographicsCSV)
-F.tableTypes "CVAPByCDAndRace_Raw" (framesPath cvapByCDAndRace2014_2018CSV)
-F.tableTypes "PopulationsByCounty_Raw" (framesPath popsByCountyCSV)
+FS.tableTypes "PresidentialByState" (framesPath presidentialByStateCSV)
+FS.tableTypes' (FS.rowGen (framesPath housePolls2020CSV)) { FS.rowTypeName = "HousePolls2020"
+                                                          , FS.columnUniverse = Proxy :: Proxy FP.ColumnsWithDayAndLocalTime
+                                                          }
+FS.tableTypes "ContextDemographics" (framesPath contextDemographicsCSV)
+FS.tableTypes "CVAPByCDAndRace_Raw" (framesPath cvapByCDAndRace2014_2018CSV)
+FS.tableTypes "PopulationsByCounty_Raw" (framesPath popsByCountyCSV)
 -- NB: cd115, cd114, cd113 are all also present and have the same table-types
-F.tableTypes "CDFromPUMA2012"       (framesPath cd116FromPUMA2012CSV)
+FS.tableTypes "CDFromPUMA2012"       (framesPath cd116FromPUMA2012CSV)
 
 
-F.tableTypes "TurnoutASR"          (framesPath detailedASRTurnoutCSV)
-F.tableTypes "TurnoutASE"          (framesPath detailedASETurnoutCSV)
-F.tableTypes "StateTurnout"        (framesPath stateTurnoutCSV)
-F.tableTypes "ASRDemographics" (framesPath ageSexRaceDemographicsLongCSV)
-F.tableTypes "ASEDemographics" (framesPath ageSexEducationDemographicsLongCSV)
-F.tableTypes "EdisonExit2018" (framesPath exitPoll2018CSV)
+FS.tableTypes "TurnoutASR"          (framesPath detailedASRTurnoutCSV)
+FS.tableTypes "TurnoutASE"          (framesPath detailedASETurnoutCSV)
+FS.tableTypes "StateTurnout"        (framesPath stateTurnoutCSV)
+FS.tableTypes "ASRDemographics" (framesPath ageSexRaceDemographicsLongCSV)
+FS.tableTypes "ASEDemographics" (framesPath ageSexEducationDemographicsLongCSV)
+FS.tableTypes "EdisonExit2018" (framesPath exitPoll2018CSV)
 
-F.tableTypes "ElectoralCollege" (framesPath electorsCSV)
+FS.tableTypes "ElectoralCollege" (framesPath electorsCSV)
 
-F.tableTypes "States" (framesPath statesCSV)
-F.tableTypes "StateCountyCD" (framesPath stateCounty116CDCSV)
-F.tableTypes "StateCountyTractPUMA" (framesPath stateCountyTractPUMACSV)
-F.tableTypes "CountyToCD116" (framesPath countyToCD116CSV)
-F.tableTypes "CD116FromStateLower2016" (framesPath cd116FromStateLower2016CSV)
-F.tableTypes "CD116FromStateUpper2016" (framesPath cd116FromStateUpper2016CSV)
-F.tableTypes "StateLower2016FromPUMA" (framesPath stateLower2016FromPUMACSV)
-F.tableTypes "StateUpper2016FromPUMA" (framesPath stateUpper2016FromPUMACSV)
-F.tableTypes "CountyFromPUMA" (framesPath county2014FromPUMA2012CSV)
+FS.tableTypes "States" (framesPath statesCSV)
+FS.tableTypes "StateCountyCD" (framesPath stateCounty116CDCSV)
+FS.tableTypes "StateCountyTractPUMA" (framesPath stateCountyTractPUMACSV)
+FS.tableTypes "CountyToCD116" (framesPath countyToCD116CSV)
+FS.tableTypes "CD116FromStateLower2016" (framesPath cd116FromStateLower2016CSV)
+FS.tableTypes "CD116FromStateUpper2016" (framesPath cd116FromStateUpper2016CSV)
+FS.tableTypes "StateLower2016FromPUMA" (framesPath stateLower2016FromPUMACSV)
+FS.tableTypes "StateUpper2016FromPUMA" (framesPath stateUpper2016FromPUMACSV)
+FS.tableTypes "CountyFromPUMA" (framesPath county2014FromPUMA2012CSV)
+
+
+rmapM :: Monad m => (a -> m b) -> Streamly.Fold.Fold m x a -> Streamly.Fold.Fold m x b
+#if MIN_VERSION_streamly(0,8,0)
+rmapM = Streamly.Fold.rmapM
+#else
+rmapM = Streamly.Fold.mapM
+#endif
+{-# INLINE rmapM #-}
 
 logLengthF :: T.Text -> Streamly.Fold.Fold K.StreamlyM a ()
-logLengthF t = Streamly.Fold.mapM (\n -> K.logStreamly K.Diagnostic $ t <> " " <> (T.pack $ show n)) Streamly.Fold.length
+logLengthF t = rmapM (\n -> K.logStreamly K.Diagnostic $ t <> " " <> (T.pack $ show n)) Streamly.Fold.length
 
 loadToRecStream
   :: forall rs t m
   . ( Monad m
+    , Monad (t m)
     , Streamly.MonadAsync m
---    , MonadIO m
     , Exceptions.MonadCatch m
---    , F.ReadRec rs
     , V.RMap rs
     , Frames.Streamly.StrictReadRec rs
     , Streamly.IsStream t
     )
-  => F.ParserOptions
+  => Frames.Streamly.ParserOptions
   -> FilePath
   -> (F.Record rs -> Bool)
   -> t m (F.Record rs)
@@ -151,11 +159,11 @@ loadToRecStream po fp filterF = Streamly.filter filterF
 loadToMaybeRecStream
   :: forall qs rs t m
   . ( Monad m
+    , Monad (t m)
     , Streamly.MonadAsync m
---    , MonadIO m
     , Exceptions.MonadCatch m
     , Streamly.IsStream t
-    , F.ReadRec qs
+    , Frames.Streamly.StrictReadRec qs
     , V.RMap rs
     , Show (F.Record rs)
     , V.RMap qs
@@ -163,7 +171,7 @@ loadToMaybeRecStream
     , (V.ReifyConstraint Show (Maybe F.:. F.ElField) rs)
     , rs F.⊆ qs
     )
-  => F.ParserOptions
+  => Frames.Streamly.ParserOptions
   -> FilePath
   -> (F.Rec (Maybe F.:. F.ElField) rs -> Bool)
   -> t m (F.Rec (Maybe F.:. F.ElField) rs)
@@ -190,7 +198,7 @@ loadToRecList
     , Frames.Streamly.StrictReadRec rs
     , V.RMap rs
     )
-  => F.ParserOptions
+  => Frames.Streamly.ParserOptions
   -> FilePath
   -> (F.Record rs -> Bool)
   -> K.Sem r [F.Record rs]
@@ -204,7 +212,7 @@ loadToFrame
      , FI.RecVec rs
      , V.RMap rs
      )
-  => F.ParserOptions
+  => Frames.Streamly.ParserOptions
   -> FilePath
   -> (F.Record rs -> Bool)
   -> K.Sem r (F.FrameRec rs)
@@ -226,7 +234,7 @@ processMaybeRecStream
      , V.RPureConstrained V.KnownField rs
      , V.RecApplicative rs
      , V.RApply rs
---     , Show (F.Rec (Maybe F.:. F.ElField) rs)
+     , Show (F.Rec (Maybe F.:. F.ElField) rs)
      )
   => (F.Rec (Maybe F.:. F.ElField) rs -> (F.Rec (Maybe F.:. F.ElField) rs)) -- fix any Nothings you need to/can
   -> (F.Record rs -> Bool) -- filter after removing Nothings
@@ -237,17 +245,20 @@ processMaybeRecStream fixMissing filterRows maybeRecS = do
       addMissings m = FL.fold (FL.Fold addMissing m id)
 #if MIN_VERSION_streamly(0,8,0)
       whatsMissingF = Streamly.Fold.mkFold (\m a -> Streamly.Fold.Partial $ addMissings m (FM.whatsMissingRow a)) (Streamly.Fold.Partial Map.empty) id
+--      showRecsF = Streamly.drainBy $ liftIO. putStrLn . show --Streamly.Fold.mkFoldM_ (\_ a -> (liftIO $ putStrLn $ show a) >> (return $ Streamly.Fold.Partial ())) (return $ Streamly.Fold.Partial ())
 #else
       whatsMissingF = Streamly.Fold.mkPure (\m a -> addMissings m (FM.whatsMissingRow a)) Map.empty id
+--      showRecsF = Streamly.Fold.mkFold (\m a -> putStrLn $ show a) (return ()) return
 #endif
       logMissingF :: T.Text -> Streamly.Fold.Fold K.StreamlyM (F.Rec (Maybe F.:. F.ElField) rs) ()
-      logMissingF t = Streamly.Fold.mapM (\x  -> K.logStreamly K.Diagnostic $ t <> (T.pack $ show x)) whatsMissingF
+      logMissingF t = rmapM (\x  -> K.logStreamly K.Diagnostic $ t <> (T.pack $ show x)) whatsMissingF
   Streamly.filter filterRows
     $ Streamly.tap (logLengthF "Length after fixing and dropping: ")
     $ Streamly.mapMaybe F.recMaybe
     $ Streamly.tap (logMissingF "missing after fixing: ")
     $ Streamly.map fixMissing
     $ Streamly.tap (logMissingF "missing before fixing: ")
+--    $ Streamly.tap (Streamly.Fold.drainBy $ liftIO. putStrLn . show)
     $ maybeRecS
 {-# INLINEABLE processMaybeRecStream #-}
 
