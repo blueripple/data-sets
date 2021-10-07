@@ -229,28 +229,37 @@ loadToFrame po fp filterF = do
 {-# INLINEABLE loadToFrame #-}
 
 processMaybeRecStream
-  :: forall rs
+  :: forall rs rs'
      .(V.RFoldMap rs
      , V.RPureConstrained V.KnownField rs
      , V.RecApplicative rs
      , V.RApply rs
+     , V.RFoldMap rs'
+     , V.RPureConstrained V.KnownField rs'
+     , V.RecApplicative rs'
+     , V.RApply rs'
      , Show (F.Rec (Maybe F.:. F.ElField) rs)
      )
-  => (F.Rec (Maybe F.:. F.ElField) rs -> (F.Rec (Maybe F.:. F.ElField) rs)) -- fix any Nothings you need to/can
-  -> (F.Record rs -> Bool) -- filter after removing Nothings
+  => (F.Rec (Maybe F.:. F.ElField) rs -> (F.Rec (Maybe F.:. F.ElField) rs')) -- fix any Nothings you need to/can
+  -> (F.Record rs' -> Bool) -- filter after removing Nothings
   -> Streamly.SerialT K.StreamlyM (F.Rec (Maybe F.:. F.ElField) rs)
-  -> Streamly.SerialT K.StreamlyM (F.Record rs)
+  -> Streamly.SerialT K.StreamlyM (F.Record rs')
 processMaybeRecStream fixMissing filterRows maybeRecS = do
   let addMissing m l = Map.insertWith (+) l 1 m
       addMissings m = FL.fold (FL.Fold addMissing m id)
 #if MIN_VERSION_streamly(0,8,0)
+      whatsMissingF ::  (V.RFoldMap qs, V.RPureConstrained V.KnownField qs, V.RecApplicative qs, V.RApply qs)
+                    => Streamly.Fold.Fold K.StreamlyM (F.Rec  (Maybe F.:. F.ElField) qs) (Map Text Int)
       whatsMissingF = Streamly.Fold.mkFold (\m a -> Streamly.Fold.Partial $ addMissings m (FM.whatsMissingRow a)) (Streamly.Fold.Partial Map.empty) id
 --      showRecsF = Streamly.drainBy $ liftIO. putStrLn . show --Streamly.Fold.mkFoldM_ (\_ a -> (liftIO $ putStrLn $ show a) >> (return $ Streamly.Fold.Partial ())) (return $ Streamly.Fold.Partial ())
 #else
+      whatsMissingF :: (V.RFoldMap qs, V.RPureConstrained V.KnownField qs, V.RecApplicative qs, V.RApply qs)
+                    =>  Streamly.Fold.Fold K.StreamlyM (F.Rec  (Maybe F.:. F.ElField) qs) (Map Text Int)
       whatsMissingF = Streamly.Fold.mkPure (\m a -> addMissings m (FM.whatsMissingRow a)) Map.empty id
 --      showRecsF = Streamly.Fold.mkFold (\m a -> putStrLn $ show a) (return ()) return
 #endif
-      logMissingF :: T.Text -> Streamly.Fold.Fold K.StreamlyM (F.Rec (Maybe F.:. F.ElField) rs) ()
+      logMissingF ::  (V.RFoldMap qs, V.RPureConstrained V.KnownField qs, V.RecApplicative qs, V.RApply qs)
+                  =>T.Text -> Streamly.Fold.Fold K.StreamlyM (F.Rec (Maybe F.:. F.ElField) qs) ()
       logMissingF t = rmapM (\x  -> K.logStreamly K.Diagnostic $ t <> (T.pack $ show x)) whatsMissingF
   Streamly.filter filterRows
     $ Streamly.tap (logLengthF "Length after fixing and dropping: ")
