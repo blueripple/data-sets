@@ -1,4 +1,4 @@
-packages: . ~/DataScience/Frames-streamly ~/DataScience/map-reduce-folds ~/DataScience/Frames-utils ~/DataScience/heidi
+packages: . ~/DataScience/heidi
 jobs: 4
 with-compiler: ghc
 
@@ -7,14 +7,20 @@ allow-newer: base, hashable, pandoc:random, cereal-time:time, knit-haskell
 source-repository-package
   type: git
   location: https://github.com/adamConnerSax/knit-haskell
-  tag: e8180b9b82134b594c75d64e916bc28f28181b44
+  tag: e1752acfa2ce6577aea20c0a10c67e97310c3897
 
 source-repository-package
   type: git
   location: https://github.com/adamConnerSax/Frames-utils
-  tag: a8b6f9acf35948b98b01e850c847ab4f7cba7dd0
+  tag: 411a9edfb390eebfe8d005d9e83e02a5ad306005
 
 source-repository-package
   type: git
   location: https://github.com/adamConnerSax/Frames-streamly
-  tag: e5c9cab98d9d9305e42ea1147a57eb1dbdb3c921
+  tag: 0ff0622ddbe9487263873232f69843822deb13bf
+
+
+source-repository-package
+  type: git
+  location: https://github.com/adamConnerSax/map-reduce-folds
+  tag: e8928f5db385fdf18bbe7c613ff572e284c7adf3

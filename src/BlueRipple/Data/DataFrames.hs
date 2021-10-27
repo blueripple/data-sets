@@ -59,6 +59,10 @@ import qualified Frames.MaybeUtils             as FM
 import qualified Frames.Streamly.CSV           as Frames.Streamly
 import qualified Frames.Streamly.InCore        as Frames.Streamly
 import qualified Frames.Streamly.TH as FS
+import qualified Frames.Streamly.ColumnUniverse as FS
+import Frames.Streamly.Streaming.Streamly (StreamlyStream(..), SerialT)
+
+type StreamlyS = StreamlyStream SerialT
 
 -- pre-declare cols with non-standard types
 F.declareColumn "Date" ''FP.FrameDay
@@ -70,7 +74,7 @@ F.declareColumn "ElectionDate" ''FP.FrameDay
 FS.tableTypes "TotalSpending" (framesPath totalSpendingCSV)
 
 FS.tableTypes' (FS.rowGen (framesPath forecastAndSpendingCSV)) { FS.rowTypeName = "ForecastAndSpending"
-                                                               , FS.columnUniverse = Proxy :: Proxy FP.ColumnsWithDayAndLocalTime
+                                                               , FS.columnParsers = FS.parseableParseHowRec @FP.ColumnsWithDayAndLocalTime
                                                                }
 
 FS.tableTypes "ElectionResults" (framesPath electionResultsCSV)
@@ -95,7 +99,7 @@ FS.tableTypes' (FS.rowGen  (framesPath electionIntegrityByState2018CSV)) { FS.ro
 
 FS.tableTypes "PresidentialByState" (framesPath presidentialByStateCSV)
 FS.tableTypes' (FS.rowGen (framesPath housePolls2020CSV)) { FS.rowTypeName = "HousePolls2020"
-                                                          , FS.columnUniverse = Proxy :: Proxy FP.ColumnsWithDayAndLocalTime
+                                                          , FS.columnParsers = FS.parseableParseHowRec @FP.ColumnsWithDayAndLocalTime --Proxy :: Proxy FP.ColumnsWithDayAndLocalTime
                                                           }
 FS.tableTypes "ContextDemographics" (framesPath contextDemographicsCSV)
 FS.tableTypes "CVAPByCDAndRace_Raw" (framesPath cvapByCDAndRace2014_2018CSV)
@@ -138,7 +142,7 @@ logLengthF t = rmapM (\n -> K.logStreamly K.Diagnostic $ t <> " " <> (T.pack $ s
 loadToRecStream
   :: forall rs t m
   . ( Monad m
-    , Monad (t m)
+    , FL.PrimMonad m
     , Streamly.MonadAsync m
     , Exceptions.MonadCatch m
     , V.RMap rs
@@ -150,7 +154,7 @@ loadToRecStream
   -> (F.Record rs -> Bool)
   -> t m (F.Record rs)
 loadToRecStream po fp filterF = Streamly.filter filterF
-                                $ Frames.Streamly.readTableOpt po fp
+                                $ stream $ Frames.Streamly.readTableOpt @rs @(StreamlyStream t) po fp
 {-# INLINEABLE loadToRecStream #-}
 
 -- load with cols qs
@@ -159,7 +163,7 @@ loadToRecStream po fp filterF = Streamly.filter filterF
 loadToMaybeRecStream
   :: forall qs rs t m
   . ( Monad m
-    , Monad (t m)
+    , FL.PrimMonad m
     , Streamly.MonadAsync m
     , Exceptions.MonadCatch m
     , Streamly.IsStream t
@@ -178,7 +182,8 @@ loadToMaybeRecStream
 loadToMaybeRecStream po fp filterF =
   Streamly.filter filterF
   $ Streamly.map F.rcast
-  $ Frames.Streamly.readTableMaybeOpt @qs po fp
+  $ stream
+  $ Frames.Streamly.readTableMaybeOpt @qs @(StreamlyStream t) po fp
 {-
     let reportRows :: Streamly.SerialT (K.Sem r) x -> FilePath -> K.Sem r ()
       reportRows str fn = do
@@ -217,7 +222,12 @@ loadToFrame
   -> (F.Record rs -> Bool)
   -> K.Sem r (F.FrameRec rs)
 loadToFrame po fp filterF = do
-  frame <- K.streamlyToKnit $ Frames.Streamly.inCoreAoS $ Streamly.filter filterF $ Frames.Streamly.readTableOpt po fp
+  frame <- K.streamlyToKnit
+           $ Frames.Streamly.inCoreAoS
+           $ StreamlyStream
+           $ Streamly.filter filterF
+           $ stream
+           $ Frames.Streamly.readTableOpt @rs @StreamlyS po fp
   let reportRows :: Foldable f => f x -> FilePath -> K.Sem r ()
       reportRows f fn =
         K.logLE K.Diagnostic
