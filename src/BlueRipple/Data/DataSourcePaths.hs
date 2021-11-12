@@ -1,9 +1,13 @@
+{-# LANGUAGE DataKinds #-}
 {-# LANGUAGE OverloadedStrings   #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 module BlueRipple.Data.DataSourcePaths where
 
 import qualified Paths_blueripple_data_sets    as Paths
---import qualified Frames.TH                     as F
+import qualified Frames.Streamly.TH            as FS
+import qualified Frames.Streamly.ColumnUniverse as FS
+import qualified Data.Map as M
+import qualified Data.Set as S
 
 thFramesDataDir :: FilePath
 thFramesDataDir = "./data/"
@@ -44,6 +48,30 @@ houseElections2018CSV = electionDir ++ "1976-2018-house_v5_u1.csv"
 
 houseElectionsCSV :: FilePath
 houseElectionsCSV = electionDir ++ "1976-2020-house.csv"
+
+houseElectionsCols :: Set FS.HeaderText
+houseElectionsCols = S.fromList
+                     $ FS.HeaderText
+                     <$> ["year", "state", "state_po","state_fips","district","stage","runoff","special","candidate","party","candidatevotes","totalvotes"]
+
+houseElectionRenames :: M.Map FS.HeaderText FS.ColTypeName
+houseElectionRenames = M.mapKeys FS.HeaderText
+                       $ fmap FS.ColTypeName
+                       $ M.fromList [("runoff","runoffOM"),("special","specialOM")]
+
+houseElectionsRowGen :: FS.RowGen FS.DefaultStream 'FS.ColumnByName FS.CommonColumns
+houseElectionsRowGen = setOrMissingWhen $ FS.modifyColumnSelector modSelector rg
+  where
+    setOrMissingWhen =  FS.setOrMissingWhen (FS.HeaderText "runoff") FS.AlwaysPossible
+                        . FS.setOrMissingWhen (FS.HeaderText "special") FS.AlwaysPossible
+    modSelector = FS.renameSomeUsingNames houseElectionRenames
+                  . FS.columnSubset houseElectionsCols
+    rg =  (FS.rowGen (framesPath $ houseElectionsCSV))
+          {
+            FS.rowTypeName = "HouseElections"
+          , FS.tablePrefix = ""
+          , FS.separator = FS.CharSeparator ','
+          }
 
 senateElectionsCSV :: FilePath
 senateElectionsCSV = electionDir ++ "1976-2020-senate_u1.csv"

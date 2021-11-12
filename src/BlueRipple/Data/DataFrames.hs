@@ -37,8 +37,9 @@ import qualified Data.Map as Map
 import qualified Data.Text                     as T
 import qualified Data.Vinyl                    as V
 import qualified Frames                        as F
-import qualified Frames.CSV                    as F
-import qualified Frames.InCore                 as FI
+--import qualified Frames.Streamly.CSV                    as F
+--import qualified Frames.Streamly.InCore                 as FI
+
 
 import qualified Pipes                         as P
 import qualified Pipes.Prelude                 as P
@@ -56,10 +57,12 @@ import qualified Streamly as Streamly
 
 import qualified Frames.ParseableTypes         as FP
 import qualified Frames.MaybeUtils             as FM
-import qualified Frames.Streamly.CSV           as Frames.Streamly
-import qualified Frames.Streamly.InCore        as Frames.Streamly
+import qualified Frames.Streamly.CSV           as FS
+import qualified Frames.Streamly.InCore        as FS
 import qualified Frames.Streamly.TH as FS
 import qualified Frames.Streamly.ColumnUniverse as FS
+import qualified Frames.Streamly.Streaming.Class as FS (StreamFunctions(..), StreamFunctionsIO(..))
+
 import Frames.Streamly.Streaming.Streamly (StreamlyStream(..), SerialT)
 
 type StreamlyS = StreamlyStream SerialT
@@ -80,7 +83,12 @@ FS.tableTypes' (FS.rowGen (framesPath forecastAndSpendingCSV)) { FS.rowTypeName 
 FS.tableTypes "ElectionResults" (framesPath electionResultsCSV)
 FS.tableTypes "AngryDems" (framesPath angryDemsCSV)
 FS.tableTypes "AllMoney2020" (framesPath allMoney2020CSV)
-FS.tableTypes "HouseElections" (framesPath houseElectionsCSV)
+--FS.tableTypes "HouseElections" (framesPath houseElectionsCSV)
+FS.tableTypes' houseElectionsRowGen
+FS.declareColumn "Special" ''Bool
+FS.declareColumn "Runoff" ''Bool
+
+
 FS.tableTypes' (FS.rowGen (framesPath senateElectionsCSV)) { FS.rowTypeName = "SenateElections"
                                                            , FS.tablePrefix = "Senate"
                                                            }
@@ -146,15 +154,15 @@ loadToRecStream
     , Streamly.MonadAsync m
     , Exceptions.MonadCatch m
     , V.RMap rs
-    , Frames.Streamly.StrictReadRec rs
+    , FS.StrictReadRec rs
     , Streamly.IsStream t
     )
-  => Frames.Streamly.ParserOptions
+  => FS.ParserOptions
   -> FilePath
   -> (F.Record rs -> Bool)
   -> t m (F.Record rs)
 loadToRecStream po fp filterF = Streamly.filter filterF
-                                $ stream $ Frames.Streamly.readTableOpt @rs @(StreamlyStream t) po fp
+                                $ stream $ FS.readTableOpt @rs @(StreamlyStream t) po fp
 {-# INLINEABLE loadToRecStream #-}
 
 -- load with cols qs
@@ -167,7 +175,7 @@ loadToMaybeRecStream
     , Streamly.MonadAsync m
     , Exceptions.MonadCatch m
     , Streamly.IsStream t
-    , Frames.Streamly.StrictReadRec qs
+    , FS.StrictReadRec qs
     , V.RMap rs
     , Show (F.Record rs)
     , V.RMap qs
@@ -175,7 +183,7 @@ loadToMaybeRecStream
     , (V.ReifyConstraint Show (Maybe F.:. F.ElField) rs)
     , rs F.⊆ qs
     )
-  => Frames.Streamly.ParserOptions
+  => FS.ParserOptions
   -> FilePath
   -> (F.Rec (Maybe F.:. F.ElField) rs -> Bool)
   -> t m (F.Rec (Maybe F.:. F.ElField) rs)
@@ -183,7 +191,7 @@ loadToMaybeRecStream po fp filterF =
   Streamly.filter filterF
   $ Streamly.map F.rcast
   $ stream
-  $ Frames.Streamly.readTableMaybeOpt @qs @(StreamlyStream t) po fp
+  $ FS.readTableMaybeOpt @qs @(StreamlyStream t) po fp
 {-
     let reportRows :: Streamly.SerialT (K.Sem r) x -> FilePath -> K.Sem r ()
       reportRows str fn = do
@@ -200,10 +208,10 @@ loadToMaybeRecStream po fp filterF =
 loadToRecList
   :: forall rs r
   . ( K.KnitEffects r
-    , Frames.Streamly.StrictReadRec rs
+    , FS.StrictReadRec rs
     , V.RMap rs
     )
-  => Frames.Streamly.ParserOptions
+  => FS.ParserOptions
   -> FilePath
   -> (F.Record rs -> Bool)
   -> K.Sem r [F.Record rs]
@@ -213,21 +221,21 @@ loadToRecList po fp filterF = K.streamlyToKnit $ Streamly.toList $ loadToRecStre
 loadToFrame
   :: forall rs r
    . ( K.KnitEffects r
-     , Frames.Streamly.StrictReadRec rs
-     , FI.RecVec rs
+     , FS.StrictReadRec rs
+     , FS.RecVec rs
      , V.RMap rs
      )
-  => Frames.Streamly.ParserOptions
+  => FS.ParserOptions
   -> FilePath
   -> (F.Record rs -> Bool)
   -> K.Sem r (F.FrameRec rs)
 loadToFrame po fp filterF = do
   frame <- K.streamlyToKnit
-           $ Frames.Streamly.inCoreAoS
+           $ FS.inCoreAoS
            $ StreamlyStream
            $ Streamly.filter filterF
            $ stream
-           $ Frames.Streamly.readTableOpt @rs @StreamlyS po fp
+           $ FS.readTableOpt @rs @StreamlyS po fp
   let reportRows :: Foldable f => f x -> FilePath -> K.Sem r ()
       reportRows f fn =
         K.logLE K.Diagnostic
@@ -368,8 +376,8 @@ loadToRecListChecked
   :: forall rs effs
    . ( MonadIO (K.Sem effs)
      , K.LogWithPrefixesLE effs
-     , F.ReadRec rs
-     , FI.RecVec rs
+     , FS.StrictReadRec rs
+     , FS.RecVec rs
      , V.RFoldMap rs
      , V.RMap rs
      , V.RPureConstrained V.KnownField rs
@@ -377,7 +385,7 @@ loadToRecListChecked
      , V.RApply rs
      , rs F.⊆ rs
      )
-  => F.ParserOptions
+  => FS.ParserOptions
   -> FilePath
   -> (F.Record rs -> Bool)
   -> K.Sem effs [F.Record rs]
@@ -388,24 +396,27 @@ loadToMaybeRecs
   :: forall rs rs' effs
    . ( MonadIO (K.Sem effs)
      , K.LogWithPrefixesLE effs
-     , F.ReadRec rs'
-     , FI.RecVec rs'
+     , FS.StrictReadRec rs'
+     , FS.RecVec rs'
      , V.RMap rs'
      , rs F.⊆ rs'
      )
-  => F.ParserOptions
+  => FS.ParserOptions
   -> (F.Rec (Maybe F.:. F.ElField) rs -> Bool)
   -> FilePath
   -> K.Sem effs [F.Rec (Maybe F.:. F.ElField) rs]
 loadToMaybeRecs po filterF fp = do
-  let producerM = F.readTableMaybeOpt @_ @rs' po fp --P.>-> P.filter filterF
+  let producerM = FS.readTableMaybeOpt @rs' @(StreamlyStream SerialT) @IO po fp --P.>-> P.filter filterF
   listM :: [F.Rec (Maybe F.:. F.ElField) rs] <-
     liftIO
-    $     F.runSafeEffect
-    $     P.toListM
-    $     producerM
-    P.>-> P.map F.rcast
-    P.>-> P.filter filterF
+    $ FS.runSafe @(StreamlyStream SerialT) @IO
+    $ FS.sToList
+    $ FS.sMapMaybe (\r -> if filterF r then Just r else Nothing)
+    $ FS.sMap F.rcast
+    $ producerM
+--    $
+--    P.>-> P.map F.rcast
+--    P.>-> P.filter filterF
   let reportRows :: Foldable f => f x -> FilePath -> K.Sem effs ()
       reportRows f fn =
         K.logLE K.Diagnostic
