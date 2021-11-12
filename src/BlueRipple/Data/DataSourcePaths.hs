@@ -39,8 +39,11 @@ forecastAndSpendingCSV :: FilePath
 forecastAndSpendingCSV =
   campaignFinanceDir ++ "forecastAndSpending.csv"
 
+houseElections2018CSV :: FilePath
+houseElections2018CSV = electionDir ++ "1976-2018-house_v5_u1.csv"
+
 houseElectionsCSV :: FilePath
-houseElectionsCSV = electionDir ++ "1976-2018-house_v5_u1.csv"
+houseElectionsCSV = electionDir ++ "1976-2020-house.csv"
 
 senateElectionsCSV :: FilePath
 senateElectionsCSV = electionDir ++ "1976-2020-senate_u1.csv"
