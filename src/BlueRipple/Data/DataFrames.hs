@@ -105,7 +105,7 @@ FS.tableTypes' (FS.rowGen  (framesPath electionIntegrityByState2018CSV)) { FS.ro
 --                                                                       , F.tablePrefix = "PEI"
 
 
-FS.tableTypes "PresidentialByState" (framesPath presidentialByStateCSV)
+FS.tableTypes' presidentialByStateRowGen -- "PresidentialByState" (framesPath presidentialByStateCSV)
 FS.tableTypes' (FS.rowGen (framesPath housePolls2020CSV)) { FS.rowTypeName = "HousePolls2020"
                                                           , FS.columnParsers = FS.parseableParseHowRec @FP.ColumnsWithDayAndLocalTime --Proxy :: Proxy FP.ColumnsWithDayAndLocalTime
                                                           }

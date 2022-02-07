@@ -76,6 +76,33 @@ houseElectionsRowGen = setOrMissingWhen $ FS.modifyColumnSelector modSelector rg
 senateElectionsCSV :: FilePath
 senateElectionsCSV = electionDir ++ "1976-2020-senate_u1.csv"
 
+
+presidentialByStateCSV :: FilePath
+presidentialByStateCSV = electionDir ++ "1976-2020-president.csv"
+
+presidentialByStateCols ::  Set FS.HeaderText
+presidentialByStateCols = S.fromList
+                     $ FS.HeaderText
+                     <$> ["year", "state", "state_po","state_fips","candidate","candidatevotes","totalvotes","party_simplified"]
+
+
+presElectionRenames :: M.Map FS.HeaderText FS.ColTypeName
+presElectionRenames = M.mapKeys FS.HeaderText
+                       $ fmap FS.ColTypeName
+                       $ M.fromList [("party_simplified","party")]
+
+presidentialByStateRowGen :: FS.RowGen FS.DefaultStream 'FS.ColumnByName FS.CommonColumns
+presidentialByStateRowGen = FS.modifyColumnSelector modSelector rg
+  where
+    modSelector = FS.renameSomeUsingNames presElectionRenames . FS.columnSubset presidentialByStateCols
+    rg =  (FS.rowGen (framesPath $ presidentialByStateCSV))
+          {
+            FS.rowTypeName = "PresidentialByState"
+          , FS.tablePrefix = ""
+          , FS.separator = FS.CharSeparator ','
+          }
+
+
 allMoney2020CSV :: FilePath
 allMoney2020CSV = campaignFinanceDir ++ "allMoney_20200902.csv"
 
@@ -95,9 +122,6 @@ electionResultsCSV = electionDir ++ "electionResult2018.csv"
 
 exitPoll2018CSV :: FilePath
 exitPoll2018CSV = electionDir ++ "EdisonExitPoll2018.csv"
-
-presidentialByStateCSV :: FilePath
-presidentialByStateCSV = electionDir ++ "1976-2016-president.csv"
 
 electorsCSV :: FilePath
 electorsCSV = electionDir ++ "electoral_college.csv"
