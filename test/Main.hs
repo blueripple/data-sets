@@ -13,7 +13,7 @@ main :: IO ()
 main = do
   let knitConfig = (Knit.defaultKnitConfig Nothing ) { Knit.logIf = const True}
   resE <- Knit.consumeKnitEffectStack knitConfig $ do
-    f <- BR.loadToRecListChecked @(Frames.RecordColumns BR.States) Frames.defaultParser (BR.framesPath BR.statesCSV) (const True)
+    f <- BR.loadToFrame BR.presidentialByStateParser BR.presidentialByStateCSV (const True)
     putTextLn $ Text.intercalate "\n" $ fmap show $ Foldl.fold Foldl.list f
   case resE of
     Left err -> putTextLn $ "Error: " <> show err
