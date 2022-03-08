@@ -297,7 +297,7 @@ toPipes = P.unfoldr unconsS
 {-# INLINEABLE toPipes #-}
 
 
-someExceptionAsPandocError :: forall r a. (Polysemy.MemberWithError (Polysemy.Error K.PandocError) r)
+someExceptionAsPandocError :: forall r a. (Polysemy.Member (Polysemy.Error K.PandocError) r)
                            => Polysemy.Sem (Polysemy.Error SomeException ': r) a -> Polysemy.Sem r a
 someExceptionAsPandocError = Polysemy.mapError (\(e :: SomeException) -> Pandoc.PandocSomeError $ T.pack $ displayException e)
 {-# INLINEABLE someExceptionAsPandocError #-}
