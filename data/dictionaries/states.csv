@@ -1,57 +1,57 @@
-StateName,StateFIPS,StateAbbreviation,Region,Division
-Alabama,01,AL,South,EastSouthCentral
-Alaska,02,AK,West,Pacific
-Arizona,04,AZ,West,Mountain
-Arkansas,05,AR,South,WestSouthCentral
-California,06,CA,West,Pacific
-Colorado,08,CO,West,Mountain
-Connecticut,09,CT,Northeast,NewEngland
-Delaware,10,DE,South,SouthAtlantic
-District of Columbia,11,DC,South,SouthAtlantic
-Florida,12,FL,South,SouthAtlantic
-Georgia,13,GA,South,SouthAtlantic
-Hawaii,15,HI,West,Pacific
-Idaho,16,ID,West,Mountain
-Illinois,17,IL,Midwest,EastNorthCentral
-Indiana,18,IN,Midwest,EastNorthCentral
-Iowa,19,IA,Midwest,WestNorthCentral
-Kansas,20,KS,Midwest,WestNorthCentral
-Kentucky,21,KY,South,EastSouthCentral
-Louisiana,22,LA,South,WestSouthCentral
-Maine,23,ME,Northeast,NewEngland
-Maryland,24,MD,South,SouthAtlantic
-Massachusetts,25,MA,Northeast,NewEngland
-Michigan,26,MI,Midwest,EastNorthCentral
-Minnesota,27,MN,Midwest,WestNorthCentral
-Mississippi,28,MS,South,EastSouthCentral
-Missouri,29,MO,Midwest,WestNorthCentral
-Montana,30,MT,West,Mountain
-Nebraska,31,NE,Midwest,WestNorthCentral
-Nevada,32,NV,West,Mountain
-New Hampshire,33,NH,Northeast,NewEngland
-New Jersey,34,NJ,Northeast,MiddleAtlantic
-New Mexico,35,NM,West,Mountain
-New York,36,NY,Northeast,MiddleAtlantic
-North Carolina,37,NC,South,SouthAtlantic
-North Dakota,38,ND,Midwest,WestNorthCentral
-Ohio,39,OH,Midwest,EastNorthCentral
-Oklahoma,40,OK,South,WestSouthCentral
-Oregon,41,OR,West,Pacific
-Pennsylvania,42,PA,Northeast,MiddleAtlantic
-Rhode Island,44,RI,Northeast,NewEngland
-South Carolina,45,SC,South,SouthAtlantic
-South Dakota,46,SD,Midwest,WestNorthCentral
-Tennessee,47,TN,South,EastSouthCentral
-Texas,48,TX,South,WestSouthCentral
-Utah,49,UT,West,Mountain
-Vermont,50,VT,Northeast,NewEngland
-Virginia,51,VA,South,SouthAtlantic
-Washington,53,WA,West,Pacific
-West Virginia,54,WV,South,SouthAtlantic
-Wisconsin,55,WI,Midwest,EastNorthCentral
-Wyoming,56,WY,West,Mountain
-American Samoa,60,AS,OtherRegion,OtherDivision
-Guam,66,GU,OtherRegion,OtherDivision
-Northern Mariana Islands,69,MP,OtherRegion,OtherDivision
-Puerto Rico,72,PR,OtherRegion,OtherDivision
-Virgin Islands,78,VI,OtherRegion,OtherDivision
+StateName,StateFIPS,StateAbbreviation,Region,Division,OneDistrict,SLDUpperOnly
+Alabama,1,AL,South,EastSouthCentral,FALSE,FALSE
+Alaska,2,AK,West,Pacific,TRUE,FALSE
+Arizona,4,AZ,West,Mountain,FALSE,TRUE
+Arkansas,5,AR,South,WestSouthCentral,FALSE,FALSE
+California,6,CA,West,Pacific,FALSE,FALSE
+Colorado,8,CO,West,Mountain,FALSE,FALSE
+Connecticut,9,CT,Northeast,NewEngland,FALSE,FALSE
+Delaware,10,DE,South,SouthAtlantic,TRUE,FALSE
+District of Columbia,11,DC,South,SouthAtlantic,TRUE,FALSE
+Florida,12,FL,South,SouthAtlantic,FALSE,FALSE
+Georgia,13,GA,South,SouthAtlantic,FALSE,FALSE
+Hawaii,15,HI,West,Pacific,FALSE,FALSE
+Idaho,16,ID,West,Mountain,FALSE,TRUE
+Illinois,17,IL,Midwest,EastNorthCentral,FALSE,FALSE
+Indiana,18,IN,Midwest,EastNorthCentral,FALSE,FALSE
+Iowa,19,IA,Midwest,WestNorthCentral,FALSE,FALSE
+Kansas,20,KS,Midwest,WestNorthCentral,FALSE,FALSE
+Kentucky,21,KY,South,EastSouthCentral,FALSE,FALSE
+Louisiana,22,LA,South,WestSouthCentral,FALSE,FALSE
+Maine,23,ME,Northeast,NewEngland,FALSE,FALSE
+Maryland,24,MD,South,SouthAtlantic,FALSE,FALSE
+Massachusetts,25,MA,Northeast,NewEngland,FALSE,FALSE
+Michigan,26,MI,Midwest,EastNorthCentral,FALSE,FALSE
+Minnesota,27,MN,Midwest,WestNorthCentral,FALSE,FALSE
+Mississippi,28,MS,South,EastSouthCentral,FALSE,FALSE
+Missouri,29,MO,Midwest,WestNorthCentral,FALSE,FALSE
+Montana,30,MT,West,Mountain,FALSE,FALSE
+Nebraska,31,NE,Midwest,WestNorthCentral,FALSE,TRUE
+Nevada,32,NV,West,Mountain,FALSE,FALSE
+New Hampshire,33,NH,Northeast,NewEngland,FALSE,FALSE
+New Jersey,34,NJ,Northeast,MiddleAtlantic,FALSE,TRUE
+New Mexico,35,NM,West,Mountain,FALSE,FALSE
+New York,36,NY,Northeast,MiddleAtlantic,FALSE,FALSE
+North Carolina,37,NC,South,SouthAtlantic,FALSE,FALSE
+North Dakota,38,ND,Midwest,WestNorthCentral,TRUE,FALSE
+Ohio,39,OH,Midwest,EastNorthCentral,FALSE,FALSE
+Oklahoma,40,OK,South,WestSouthCentral,FALSE,FALSE
+Oregon,41,OR,West,Pacific,FALSE,FALSE
+Pennsylvania,42,PA,Northeast,MiddleAtlantic,FALSE,FALSE
+Rhode Island,44,RI,Northeast,NewEngland,FALSE,FALSE
+South Carolina,45,SC,South,SouthAtlantic,FALSE,FALSE
+South Dakota,46,SD,Midwest,WestNorthCentral,TRUE,FALSE
+Tennessee,47,TN,South,EastSouthCentral,FALSE,FALSE
+Texas,48,TX,South,WestSouthCentral,FALSE,FALSE
+Utah,49,UT,West,Mountain,FALSE,FALSE
+Vermont,50,VT,Northeast,NewEngland,TRUE,FALSE
+Virginia,51,VA,South,SouthAtlantic,FALSE,FALSE
+Washington,53,WA,West,Pacific,FALSE,TRUE
+West Virginia,54,WV,South,SouthAtlantic,FALSE,FALSE
+Wisconsin,55,WI,Midwest,EastNorthCentral,FALSE,FALSE
+Wyoming,56,WY,West,Mountain,TRUE,FALSE
+American Samoa,60,AS,OtherRegion,OtherDivision,FALSE,FALSE
+Guam,66,GU,OtherRegion,OtherDivision,FALSE,FALSE
+Northern Mariana Islands,69,MP,OtherRegion,OtherDivision,FALSE,FALSE
+Puerto Rico,72,PR,OtherRegion,OtherDivision,FALSE,FALSE
+Virgin Islands,78,VI,OtherRegion,OtherDivision,FALSE,FALSE
