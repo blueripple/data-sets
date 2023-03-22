@@ -1,4 +1,5 @@
 {-# LANGUAGE AllowAmbiguousTypes #-}
+{-# LANGUAGE ConstraintKinds #-}
 {-# LANGUAGE CPP                 #-}
 {-# LANGUAGE DataKinds           #-}
 {-# LANGUAGE GADTs               #-}
@@ -46,8 +47,14 @@ import qualified Pipes.Prelude                 as P
 
 import qualified Text.Pandoc                   as Pandoc
 
+#if MIN_VERSION_streamly(0,9,0)
+import qualified Streamly.Data.Stream as Streamly
+import qualified Streamly.Data.Fold as Streamly.Fold
+import qualified Streamly.Data.Stream.Prelude as SP
+#else
 import qualified Streamly.Prelude as Streamly
 import qualified Streamly.Internal.Data.Fold as Streamly.Fold
+#endif
 
 #if MIN_VERSION_streamly(0,8,0)
 #else
@@ -63,9 +70,14 @@ import qualified Frames.Streamly.TH as FS
 import qualified Frames.Streamly.ColumnUniverse as FS
 import qualified Frames.Streamly.Streaming.Class as FS (StreamFunctions(..), StreamFunctionsIO(..))
 
-import Frames.Streamly.Streaming.Streamly (StreamlyStream(..), SerialT)
+import Frames.Streamly.Streaming.Streamly (StreamlyStream(..))
 
-type StreamlyS = StreamlyStream SerialT
+#if MIN_VERSION_streamly(0,9,0)
+type Stream = Streamly.Stream
+#else
+type Stream = Streamly.SerialT
+#endif
+type StreamlyS = StreamlyStream Stream
 
 -- pre-declare cols with non-standard types
 F.declareColumn "Date" ''FP.FrameDay
@@ -144,14 +156,74 @@ rmapM = Streamly.Fold.mapM
 #endif
 {-# INLINE rmapM #-}
 
-logLengthF :: T.Text -> Streamly.Fold.Fold K.StreamlyM a ()
-logLengthF t = rmapM (\n -> K.logStreamly K.Diagnostic $ t <> " " <> (T.pack $ show n)) Streamly.Fold.length
+#if MIN_VERSION_streamly(0,9,0)
+type MonadAsync m = SP.MonadAsync m
+toPipes :: Monad m => Streamly.Stream m a -> P.Producer a m ()
+toPipes = P.unfoldr unconsS
+    where
+    -- Adapt S.uncons to return an Either instead of Maybe
+    unconsS s = Streamly.uncons s >>= maybe (return $ Left ()) (return . Right)
+{-# INLINEABLE toPipes #-}
+
+loadToRecStream
+  :: forall rs m
+  . ( Monad m
+    , FL.PrimMonad m
+    , MonadAsync m
+    , Exceptions.MonadCatch m
+    , V.RMap rs
+    , FS.StrictReadRec rs
+    )
+  => FS.ParserOptions
+  -> FilePath
+  -> (F.Record rs -> Bool)
+  -> Streamly.Stream m (F.Record rs)
+loadToRecStream po fp filterF = Streamly.filter filterF
+  $ stream $ FS.readTableOpt @rs @(StreamlyStream Streamly.Stream) po fp
+{-# INLINEABLE loadToRecStream #-}
+
+-- load with cols qs
+-- filter with rs
+-- return rs
+loadToMaybeRecStream
+  :: forall qs rs m
+  . ( Monad m
+    , FL.PrimMonad m
+    , MonadAsync m
+    , Exceptions.MonadCatch m
+    , FS.StrictReadRec qs
+    , V.RMap rs
+    , Show (F.Record rs)
+    , V.RMap qs
+    , V.RecordToList rs
+    , (V.ReifyConstraint Show (Maybe F.:. F.ElField) rs)
+    , rs F.⊆ qs
+    )
+  => FS.ParserOptions
+  -> FilePath
+  -> (F.Rec (Maybe F.:. F.ElField) rs -> Bool)
+  -> Streamly.Stream m (F.Rec (Maybe F.:. F.ElField) rs)
+loadToMaybeRecStream po fp filterF =
+  Streamly.filter filterF
+  $ fmap F.rcast
+  $ stream
+  $ FS.readTableMaybeOpt @qs @(StreamlyStream Streamly.Stream) po fp
+
+#else
+
+type MonadAsync = Streamly.MonadAsync
+toPipes :: Monad m => Streamly.SerialT m a -> P.Producer a m ()
+toPipes = P.unfoldr unconsS
+    where
+    -- Adapt S.uncons to return an Either instead of Maybe
+    unconsS s = Streamly.uncons s >>= maybe (return $ Left ()) (return . Right)
+{-# INLINEABLE toPipes #-}
 
 loadToRecStream
   :: forall rs t m
   . ( Monad m
     , FL.PrimMonad m
-    , Streamly.MonadAsync m
+    , MonadAsync m
     , Exceptions.MonadCatch m
     , V.RMap rs
     , FS.StrictReadRec rs
@@ -172,7 +244,7 @@ loadToMaybeRecStream
   :: forall qs rs t m
   . ( Monad m
     , FL.PrimMonad m
-    , Streamly.MonadAsync m
+    , MonadAsync m
     , Exceptions.MonadCatch m
     , Streamly.IsStream t
     , FS.StrictReadRec qs
@@ -192,18 +264,10 @@ loadToMaybeRecStream po fp filterF =
   $ Streamly.map F.rcast
   $ stream
   $ FS.readTableMaybeOpt @qs @(StreamlyStream t) po fp
-{-
-    let reportRows :: Streamly.SerialT (K.Sem r) x -> FilePath -> K.Sem r ()
-      reportRows str fn = do
-        sLen <- Streamly.length str
-        K.logLE K.Diagnostic
-          $  T.pack (show sLen)
-          <> " rows in "
-          <> T.pack fn
-  Streamly.yieldM $ reportRows s fp
-  s
--}
-{-# INLINEABLE loadToMaybeRecStream #-}
+#endif
+
+logLengthF :: T.Text -> Streamly.Fold.Fold K.StreamlyM a ()
+logLengthF t = rmapM (\n -> K.logStreamly K.Diagnostic $ t <> " " <> (T.pack $ show n)) Streamly.Fold.length
 
 loadToRecList
   :: forall rs r
@@ -260,12 +324,17 @@ processMaybeRecStream
      )
   => (F.Rec (Maybe F.:. F.ElField) rs -> (F.Rec (Maybe F.:. F.ElField) rs')) -- fix any Nothings you need to/can
   -> (F.Record rs' -> Bool) -- filter after removing Nothings
-  -> Streamly.SerialT K.StreamlyM (F.Rec (Maybe F.:. F.ElField) rs)
-  -> Streamly.SerialT K.StreamlyM (F.Record rs')
+  -> Stream K.StreamlyM (F.Rec (Maybe F.:. F.ElField) rs)
+  -> Stream K.StreamlyM (F.Record rs')
 processMaybeRecStream fixMissing filterRows maybeRecS = do
   let addMissing m l = Map.insertWith (+) l 1 m
       addMissings m = FL.fold (FL.Fold addMissing m id)
-#if MIN_VERSION_streamly(0,8,0)
+#if MIN_VERSION_streamly(0,9,0)
+      whatsMissingF ::  (V.RFoldMap qs, V.RPureConstrained V.KnownField qs, V.RecApplicative qs, V.RApply qs)
+                    => Streamly.Fold.Fold K.StreamlyM (F.Rec  (Maybe F.:. F.ElField) qs) (Map Text Int)
+      whatsMissingF = Streamly.Fold.foldl' (\m a -> addMissings m (FM.whatsMissingRow a)) Map.empty
+--      showRecsF = Streamly.drainBy $ liftIO. putStrLn . show --Streamly.Fold.mkFoldM_ (\_ a -> (liftIO $ putStrLn $ show a) >> (return $ Streamly.Fold.Partial ())) (return $ Streamly.Fold.Partial ())
+#elif MIN_VERSION_streamly(0,8,0)
       whatsMissingF ::  (V.RFoldMap qs, V.RPureConstrained V.KnownField qs, V.RecApplicative qs, V.RApply qs)
                     => Streamly.Fold.Fold K.StreamlyM (F.Rec  (Maybe F.:. F.ElField) qs) (Map Text Int)
       whatsMissingF = Streamly.Fold.mkFold (\m a -> Streamly.Fold.Partial $ addMissings m (FM.whatsMissingRow a)) (Streamly.Fold.Partial Map.empty) id
@@ -283,18 +352,16 @@ processMaybeRecStream fixMissing filterRows maybeRecS = do
     $ Streamly.tap (logLengthF "Length after fixing and dropping: ")
     $ Streamly.mapMaybe F.recMaybe
     $ Streamly.tap (logMissingF "missing after fixing: ")
+#if MIN_VERSION_streamly(0,9,0)
+    $ fmap fixMissing
+#else
     $ Streamly.map fixMissing
+#endif
     $ Streamly.tap (logMissingF "missing before fixing: ")
 --    $ Streamly.tap (Streamly.Fold.drainBy $ liftIO. putStrLn . show)
     $ maybeRecS
 {-# INLINEABLE processMaybeRecStream #-}
 
-toPipes :: Monad m => Streamly.SerialT m a -> P.Producer a m ()
-toPipes = P.unfoldr unconsS
-    where
-    -- Adapt S.uncons to return an Either instead of Maybe
-    unconsS s = Streamly.uncons s >>= maybe (return $ Left ()) (return . Right)
-{-# INLINEABLE toPipes #-}
 
 
 someExceptionAsPandocError :: forall r a. (Polysemy.Member (Polysemy.Error K.PandocError) r)
@@ -406,10 +473,10 @@ loadToMaybeRecs
   -> FilePath
   -> K.Sem effs [F.Rec (Maybe F.:. F.ElField) rs]
 loadToMaybeRecs po filterF fp = do
-  let producerM = FS.readTableMaybeOpt @rs' @(StreamlyStream SerialT) @IO po fp --P.>-> P.filter filterF
+  let producerM = FS.readTableMaybeOpt @rs' @StreamlyS @IO po fp --P.>-> P.filter filterF
   listM :: [F.Rec (Maybe F.:. F.ElField) rs] <-
     liftIO
-    $ FS.runSafe @(StreamlyStream SerialT) @IO
+    $ FS.runSafe @StreamlyS @IO
     $ FS.sToList
     $ FS.sMapMaybe (\r -> if filterF r then Just r else Nothing)
     $ FS.sMap F.rcast

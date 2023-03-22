@@ -1,19 +1,23 @@
-packages: . ~/DataScience/heidi  ~/DataScience/Frames-streamly
+packages: .
 jobs: 4
 with-compiler: ghc
 
-allow-newer: base, pandoc:random, cereal-time:time, knit-haskell
+allow-newer: base, ghc-prim, template-haskell, hashable, profunctors, pandoc:random, cereal-time:time, knit-haskell
 
 source-repository-package
   type: git
   location: https://github.com/adamConnerSax/knit-haskell
-  tag: d7eadcb1c6815593e7d81f4734074f8f9ec4cec8
+  tag: 7ac061e2a04078e6b451733a2270f71d08dad468
 
 source-repository-package
   type: git
   location: https://github.com/adamConnerSax/Frames-utils
-  tag: 3a22510326a741bebd1ea64ea021d3e4392e70e5
+  tag: 11fbef7c33aa9db40afb737829eb7c12616e5d98
 
+source-repository-package
+  type: git
+  location: https://github.com/adamConnerSax/Frames-streamly
+  tag: 1ac784d9dc05fa5611343b74a6f97ca957782981
 --source-repository-package
 --  type: git
 --  location: https://github.com/adamConnerSax/Frames-streamly
@@ -22,9 +26,14 @@ source-repository-package
 source-repository-package
   type: git
   location: https://github.com/adamConnerSax/map-reduce-folds
-  tag: e8928f5db385fdf18bbe7c613ff572e284c7adf3
+  tag: 773c0580654cb3a35a667a96a12d3d84634ef0bc
 
 source-repository-package
   type: git
   location: https://github.com/adamConnerSax/Frames-map-reduce
-  tag: 4e762c9ff87d1e064912847c3591f75d0126a323
+  tag: e3d4c8678098b2685b4115c5f52e8f0aac0bc160
+
+source-repository-package
+  type: git
+  location: https://github.com/adamConnerSax/heidi
+  tag: 83e0f7e6ba80baaa18ab7daafe7083828fc74d60
