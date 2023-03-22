@@ -211,7 +211,7 @@ loadToMaybeRecStream po fp filterF =
 
 #else
 
-type MonadAsync = Streamly.MonadAsync
+type MonadAsync m = Streamly.MonadAsync m
 toPipes :: Monad m => Streamly.SerialT m a -> P.Producer a m ()
 toPipes = P.unfoldr unconsS
     where
