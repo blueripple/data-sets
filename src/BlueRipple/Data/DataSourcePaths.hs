@@ -46,8 +46,12 @@ forecastAndSpendingCSV =
 houseElections2018CSV :: FilePath
 houseElections2018CSV = electionDir ++ "1976-2018-house_v5_u1.csv"
 
+houseElections2020CSV :: FilePath
+houseElections2020CSV = electionDir ++ "1976-2020-house.csv"
+
+
 houseElectionsCSV :: FilePath
-houseElectionsCSV = electionDir ++ "1976-2020-house.csv"
+houseElectionsCSV = electionDir ++ "1976-2022-house.csv"
 
 houseElectionsCols :: Set FS.HeaderText
 houseElectionsCols = S.fromList
